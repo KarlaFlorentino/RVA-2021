@@ -1,8 +1,8 @@
 # Realidade Virtual Aumentada
 
-Exercícios
+## Exercícios
 
-## T2
+#### T2
 
 [Ambiente 1](../works/T2_Ambiente1.html)
 
