@@ -1,3 +1,8 @@
-# CG
-Files for the Computer Graphics course in Three.js
-# RVA-2021
+# Realidade Virtual Aumentada
+
+Exercícios
+
+## T2
+
+[Ambiente 1](../works/T2_Ambiente1.html)
+
