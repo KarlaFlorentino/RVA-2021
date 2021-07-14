@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <script src="../libs/aframe/aframe.min.js"></script>
+
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+          <img id="sky" src="img/stars.jpg">
+          <img id="sun" src="img/sun.jpg">
+          <img id="mercury" src="img/mercury.jpg">
+          <img id="venus" src="img/venus.jpg">
+          <img id="earth" src="img/earth.jpg">
+      </a-assets>
+          
+
+      <a-entity id="rig" movement-controls position="0 0 0">
+        <a-entity camera position="0 30 100" look-controls="pointerLockEnabled: true"></a-entity>
+      </a-entity>
+
+     
+
+      <a-sky src="#sky"></a-sky>
+      <a-entity light="type: point; color: #ffffff; intensity: 1.0" position="0 30 100"></a-entity>
+
+
+
+    <a-sphere src="#sun" position="0 0 0" radius="30" ></a-sphere>
+
+    <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+        <a-sphere src="#mercury" position="0 0 50" radius="3" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-sphere>
+    </a-entity>
+
+    <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 15000">
+        <a-sphere src="#venus" position="0 0 75" radius="6" animation="property: rotation; to: 0 360 0; loop: true; dur: 15000"></a-sphere>
+    </a-entity>
+
+    <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
+        <a-sphere src="#earth" position="0 0 100" radius="9" animation="property: rotation; to: 0 360 0; loop: true; dur: 20000"></a-sphere>
+    </a-entity>
+
+    </a-scene>
+  </body>
+</html>
