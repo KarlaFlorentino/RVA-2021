@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <script src="../libs/aframe/aframe.min.js"></script>
+    <script src="../libs/aframe/aframe-extras.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- Load assets --------->
+      <a-assets>
+        <a-asset-item id="table"  src='objects/table/scene.gltf'></a-asset-item>
+        <a-asset-item id="chair"  src='objects/antique_chair/scene.gltf'></a-asset-item> 
+        <a-asset-item id="candle"  src='objects/candlestick/scene.gltf'></a-asset-item>
+        <a-asset-item id="lamp"  src='objects/antique_wall_light/scene.gltf'></a-asset-item> 
+        <a-asset-item id="clock"  src='objects/old_wall_clock/scene.gltf'></a-asset-item>   
+        <a-asset-item id="picture"  src='objects/american_horror_wall_picture/scene.gltf'></a-asset-item>   
+      </a-assets>
+
+      <a-entity movement-controls position="0 2.5 10">
+        <a-entity camera position="0 5 10" look-controls="pointerLockEnabled: true">
+          <a-cursor></a-cursor>
+        </a-entity>
+      </a-entity>
+
+      <a-entity light="type: directional; color: #ffffff; intensity: 0.6" position="0 5 -6"></a-entity>
+      <a-entity light="type: point; color: #ffffff; intensity: 1.0" position="0 5 10"></a-entity>
+
+      <!--   ground & sky ---------->
+      <a-plane ground
+        src="textures/floor.jpg"
+        material="repeat: 10 20" rotation="-90 0 0"
+        width="25" height="25" color="#ffffff"
+        shadow="receive: true">
+      </a-plane>
+
+     	<a-plane src="textures/wall.jpg" position="0 7.5 -12.5" width="25" height="15" color="#ffffff" shadow="receive: true"></a-plane>
+
+      <a-sky color="#2e2d2b"></a-sky>
+
+      <a-entity
+          gltf-model="#clock" animation-mixer
+          position="-7 8 -12" scale="8 8 8" ></a-entity>
+        </a-entity>
+ 
+        <a-entity
+          gltf-model="#picture" 
+          position="7 10 -12.5" scale="3 3 3"></a-entity>
+        </a-entity>
+       
+        <a-entity
+          gltf-model="#lamp" 
+          position="0 10 -11.5" rotation="0 180 0" scale="1.5 1.5 1.5"></a-entity>
+        </a-entity>
+ 
+        <a-entity
+          gltf-model="#table" animation-mixer
+          position="0 0 -6" >
+        </a-entity>
+
+        <a-entity
+          gltf-model="#candle" animation-mixer
+          position="0 5 -6"  scale="0.002 0.002 0.002">
+        </a-entity>
+        
+        <a-entity
+          gltf-model="#chair" 
+          position="0 0 -5"  scale="0.35 0.35 0.35" ></a-entity>
+        </a-entity>
+    </a-scene>
+  </body>
+</html>
