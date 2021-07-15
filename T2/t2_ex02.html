@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <script src="../libs/aframe/aframe.min.js"></script>
+    <script src="../libs/aframe/aframe-extras.min.js"></script>
+    <script src="t2_ex02.js"></script>
+  </head>
+  <body>
+    <a-scene shadow="type: pcfsoft" trees>
+      <!-- Load assets --------->
+      <a-assets>
+        <img id="sky" src="textures/sky.jpg">
+      </a-assets>
+
+      <a-entity movement-controls position="0 0 0">
+        <a-entity camera position="0 1 0" look-controls="pointerLockEnabled: true">
+          <a-cursor></a-cursor>
+        </a-entity>
+      </a-entity>
+
+      <a-entity light="type: ambient; color: #BBB"></a-entity>
+      <a-entity light="type: spot; angle: 45; color: #ffffff; intensity: 1.0; castShadow:true" position="0 60 120"></a-entity>
+     
+ 
+      <a-plane rotation="-90 0 0" width="101" height="101" color="#E2C78D" shadow="receive: true"></a-plane>
+        
+      <a-sky src="#sky"></a-sky>
+
+    </a-scene>
+  </body>
+</html>
