@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" href="../html/resources/default.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">  
+	</head>
+
+	<body>
+		<div id="container"></div>
+		<script id="vertexShader" type="x-shader/x-vertex">
+			void main() {
+				gl_Position = vec4( position, 1.0 );
+			}
+		</script>
+		<script id="fragmentShader" type="x-shader/x-fragment">
+			#ifdef GL_ES
+			precision mediump float;
+			#endif
+			
+			#define PI 3.14159265359
+
+			uniform vec2 u_resolution;
+			uniform vec2 u_mouse;
+			uniform float u_time;
+
+			// Plot a line on Y using a value between 0.0-1.0
+			float plot(vec2 st) {    
+				return smoothstep(0.02, 0.0, abs(st.y - st.x));
+			}
+
+			float plot(vec2 st, float pct){
+        return  smoothstep( pct-0.02, pct, st.y) - smoothstep( pct, pct+0.02, st.y);
+      }
+              
+      void main() {
+        vec2 st = gl_FragCoord.xy/u_resolution;
+              
+        // float y = pow(st.x,PI);
+
+				// Step will return 0.0 unless the value is over 0.5,
+				// in that case it will return 1.0
+				//float y = step(0.1,st.x);
+
+
+				// Smooth interpolation between 0.1 and 0.9
+				//float y = smoothstep(0.1,0.9,st.x);
+				//float y = smoothstep(0.2,0.5,st.x) - smoothstep(0.5,0.8,st.x);
+
+				
+				float y;
+				//y = mod(x,0.5); // return x modulo of 0.5
+				//y = fract(x); // return only the fraction part of a number
+				//y = ceil(x);  // nearest integer that is greater than or equal to x
+				//y = floor(x); // nearest integer less than or equal to x
+				//y = sign(x);  // extract the sign of x
+				y = abs(st.x);   // return the absolute value of x
+				//y = clamp(x,0.0,1.0); // constrain x to lie between 0.0 and 1.0
+				//y = min(0.0,x);   // return the lesser of x and 0.0
+				//y = max(0.0,x);   // return the greater of x and 0.0 
+              
+        vec3 color = vec3(y);
+              
+        float pct = plot(st,y);
+        color = (1.0-pct)*color+pct*vec3(0.0,1.0,0.0);
+              
+        gl_FragColor = vec4(color,1.0);
+    	}
+		</script>
+		<div id="webgl-output"></div>
+			<script type="module" src="exemplo_livro3.js"></script>
+		</div>
+	</body>
+</html>
