@@ -1,0 +1,51 @@
+<!--HIRO MARKER IMAGE https://jeromeetienne.github.io/AR.js/data/images/HIRO.jpg -->
+<!doctype HTML>
+<html>
+  <head>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <script src="../libs/aframe/aframe.min.js"></script>
+    <!-- include A-Frame obviously -->
+    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <!-- include ar.js for A-Frame -->
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+ </head>
+ <body style='margin : 0px; overflow: hidden;'>
+  <a-scene embedded arjs>
+    <a-assets>
+      <img id="sky" src="textures/stars.jpg">
+      <img id="sun" src="textures/sun.jpg">
+      <img id="mercury" src="textures/mercury.jpg">
+      <img id="venus" src="textures/venus.jpg">
+      <img id="earth" src="textures/earth.jpg">
+    </a-assets>
+      
+    <a-marker  preset = 'hiro' > 
+    <!-- aqui defina o conteúdo a ser exibido no topo do marcador --> 
+    
+      <a-entity light="type: ambient; color: #BBB"></a-entity>
+      <a-entity light="type: directional; color: #ffffff; intensity: 1.0" position="0 0 1"></a-entity>
+      <a-entity light="type: spot; angle: 180; color: #ffffff; intensity: 2.0" position="0 0 0"></a-entity>
+
+      <a-sphere src="#sun" position="0 0 0" radius="30" ></a-sphere>
+
+      
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; easing: linear; dur: 4000">
+          <a-sphere src="#mercury" position="0 0 50" radius="3" animation="property: rotation; to: 0 360 0; loop: true; easing: linear; dur: 4000"></a-sphere>
+      </a-entity>
+
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; easing: linear; dur: 16000">
+          <a-sphere src="#venus" position="0 0 75" radius="6" animation="property: rotation; to: 0 360 0; loop: true; easing: linear; dur: 16000"></a-sphere>
+      </a-entity>
+
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; easing: linear; dur: 25000">
+          <a-sphere src="#earth" position="0 0 100" radius="9" animation="property: rotation; to: 0 360 0; loop: true; easing: linear; dur: 500"></a-sphere>
+      </a-entity>
+   
+    </a-marker > 
+
+    <!-- defina uma câmera simples --> 
+    <a-entity camera position="0 0 400" ></a-entity>
+
+  </a-scene>
+</body>
+</html>
