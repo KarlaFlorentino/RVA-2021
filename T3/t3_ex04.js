@@ -256,11 +256,9 @@ requestAnimationFrame(function animate(nowMsec)
         sceneA.position.lerp(p, lerpAmount);
         sceneA.quaternion.slerp(q, lerpAmount);
         sceneA.scale.lerp(s, lerpAmount);
-    }else{
-        sceneA.visible = false;
     }
 
-    if(markerArray[1].visible && markerArray[2].visible &&
+    else if(markerArray[1].visible && markerArray[2].visible &&
        markerArray[3].visible && markerArray[4].visible){
         sceneB.visible = true;
 
@@ -271,11 +269,9 @@ requestAnimationFrame(function animate(nowMsec)
         sceneB.position.lerp(p, lerpAmount);
         sceneB.quaternion.slerp(q, lerpAmount);
         sceneB.scale.lerp(s, lerpAmount);
-    }else{
-        sceneB.visible = false;
     }
     
-    if(markerArray[2].visible && markerArray[3].visible && markerArray[4].visible){
+    else if(markerArray[2].visible && markerArray[3].visible && markerArray[4].visible){
         sceneC.visible = true;
         
         let p = markerArray[2].children[0].getWorldPosition();
@@ -285,11 +281,9 @@ requestAnimationFrame(function animate(nowMsec)
         sceneC.position.lerp(p, lerpAmount);
         sceneC.quaternion.slerp(q, lerpAmount);
         sceneC.scale.lerp(s, lerpAmount);
-    }else{
-        sceneC.visible = false;
     }
     
-    if(markerArray[3].visible && markerArray[4].visible){
+    else if(markerArray[3].visible && markerArray[4].visible){
         sceneD.visible = true;
         
         let p = markerArray[3].children[0].getWorldPosition();
@@ -300,11 +294,9 @@ requestAnimationFrame(function animate(nowMsec)
         sceneD.position.lerp(p, lerpAmount);
         sceneD.quaternion.slerp(q, lerpAmount);
         sceneD.scale.lerp(s, lerpAmount);
-    }else{
-        sceneD.visible = false;
     }
     
-    if(markerArray[4].visible){
+    else if(markerArray[4].visible){
         sceneF.visible = true;
         
         let p = markerArray[4].children[0].getWorldPosition();
@@ -314,7 +306,13 @@ requestAnimationFrame(function animate(nowMsec)
         sceneF.position.lerp(p, lerpAmount);
         sceneF.quaternion.slerp(q, lerpAmount);
         sceneF.scale.lerp(s, lerpAmount);
-    }else{
+    }
+    
+    else{
+        sceneA.visible = false;
+        sceneB.visible = false;
+        sceneC.visible = false;
+        sceneD.visible = false;
         sceneF.visible = false;
     }
 
