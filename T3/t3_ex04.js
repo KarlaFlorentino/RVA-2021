@@ -15,6 +15,8 @@ var scene	= new THREE.Scene();
 var camera = new THREE.Camera();
 scene.add(camera);
 
+var clock = new THREE.Clock();
+
 // array of functions for the rendering loop
 var onRenderFcts= [];
 
@@ -85,7 +87,7 @@ onRenderFcts.push(function(){
 // init controls for camera
 //var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
 
-var markerNames = ["a", "b", "c", "d", "f", "g", "hiro", "kanji"];
+var markerNames = ["a", "b", "c", "d", "f"];
 
 var markerArray = [];
 
@@ -115,100 +117,30 @@ for (let i = 0; i < markerNames.length; i++)
 // Adding object to the scene
 var light = initDefaultSpotlight(scene, new THREE.Vector3(25, 30, 20)); 
 
-var colorArray   = [0xff0000, 0xff8800, 0xffff00, 0x00cc00, 0x0000ff, 0xcc00ff];
 
-//A
-var meshA = new THREE.Mesh( 
-    new THREE.BoxGeometry(1.25,1.25,1.25), 
-    new THREE.MeshPhongMaterial({color:colorArray[0], transparent:true, opacity:0.5}) 
-);
+//----------------------------------------------------------------------------
+var man = null;
+var playAction = true;
+var time = 0;
+var mixer = new Array();
 
+// Load animated files
 var sceneA = new THREE.Group();
-meshA.position.y = 1.25/2;
-sceneA.add(meshA);
-markerArray[0].children[0].add( sceneA);
-sceneA.visible = false;
-scene.add(sceneA);
+loadGLTFFile('../assets/objects/windmill/','scene.gltf', true, sceneA, 0);
 
-//B
-var meshB = new THREE.Mesh( 
-    new THREE.BoxGeometry(1.25,1.25,1.25), 
-    new THREE.MeshPhongMaterial({color:colorArray[1], transparent:true, opacity:0.5}) 
-);
-
+// Load animated files
 var sceneB = new THREE.Group();
-meshB.position.y = 1.25/2;
-sceneB.add(meshB);
-markerArray[1].children[0].add( sceneB);
-sceneB.visible = false;
-scene.add(sceneB);
-
-//C
-var meshC = new THREE.Mesh( 
-    new THREE.BoxGeometry(1.25,1.25,1.25), 
-    new THREE.MeshPhongMaterial({color:colorArray[2], transparent:true, opacity:0.5}) 
-);
+loadGLTFFile('../assets/objects/walkingMan/','scene.gltf', true, sceneB, 1);
 
 var sceneC = new THREE.Group();
-meshC.position.y = 1.25/2;
-sceneC.add(meshC);
-markerArray[2].children[0].add( sceneC);
-sceneC.visible = false;
-scene.add(sceneC);
-
-//D
-var meshD = new THREE.Mesh( 
-    new THREE.BoxGeometry(1.25,1.25,1.25), 
-    new THREE.MeshPhongMaterial({color:colorArray[3], transparent:true, opacity:0.5}) 
-);
+loadGLTFFile('../assets/objects/chair/','scene.gltf', true, sceneC, 2);
 
 var sceneD = new THREE.Group();
-meshD.position.y = 1.25/2;
-sceneD.add(meshD);
-markerArray[3].children[0].add( sceneD);
-sceneD.visible = false;
-scene.add(sceneD);
-
-//F
-var meshF = new THREE.Mesh( 
-    new THREE.BoxGeometry(1.25,1.25,1.25), 
-    new THREE.MeshPhongMaterial({color:colorArray[4], transparent:true, opacity:0.5}) 
-);
+loadGLTFFile('../assets/objects/orca/','scene.gltf', true, sceneD, 3);
 
 var sceneF = new THREE.Group();
-meshF.position.y = 1.25/2;
-sceneF.add(meshF);
-markerArray[4].children[0].add( sceneF);
-sceneF.visible = false;
-scene.add(sceneF);
+loadGLTFFile('../assets/objects/wooden_goose/','scene.gltf', true, sceneF, 4);
 
-//G
-var meshG = new THREE.Mesh( 
-    new THREE.BoxGeometry(1.25,1.25,1.25), 
-    new THREE.MeshPhongMaterial({color:colorArray[5], transparent:true, opacity:0.5}) 
-);
-
-var sceneG = new THREE.Group();
-meshG.position.y = 1.25/2;
-sceneG.add(meshG);
-markerArray[5].children[0].add( sceneG);
-sceneG.visible = false;
-scene.add(sceneG);
-
-
-//Todos
-//G
-var mesh = new THREE.Mesh( 
-    new THREE.BoxGeometry(4,1.25,4), 
-    new THREE.MeshPhongMaterial({color:colorArray[5], transparent:true, opacity:0.5}) 
-);
-
-var sceneAll = new THREE.Group();
-mesh.position.y = 1.25/2;
-sceneAll.add(mesh);
-//markerArray[5].children[0].add( sceneAll);
-sceneAll.visible = false;
-scene.add(sceneAll);
 
 //----------------------------------------------------------------------------
 // Render the whole thing on the page
@@ -218,6 +150,76 @@ onRenderFcts.push(function(){
 	renderer.render( scene, camera );
 })
 
+
+function loadGLTFFile(modelPath, modelName, centerObject, sceneGroup, marker)
+{
+  var loader = new GLTFLoader( );
+  loader.load( modelPath + modelName, function ( gltf ) {
+    var obj = gltf.scene;
+    obj.traverse( function ( child ) {
+      if ( child ) {
+          child.castShadow = true;
+      }
+    });
+    obj.traverse( function( node )
+    {
+      if( node.material ) node.material.side = THREE.DoubleSide;
+    });
+
+    // Only fix the position of the centered object
+    // The man around will have a different geometric transformation
+    if(centerObject)
+    {
+        obj = normalizeAndRescale(obj, 2);
+        obj = fixPosition(obj);
+    }
+    
+    //scene.add ( obj );
+    sceneGroup.add( obj );
+    markerArray[marker].children[0].add( sceneGroup );
+    sceneGroup.visible = false;
+    scene.add(sceneGroup);
+
+
+
+    if(gltf.animations != 0){
+        // Create animationMixer and push it in the array of mixers
+        var mixerLocal = new THREE.AnimationMixer(obj);
+        mixerLocal.clipAction( gltf.animations[0] ).play();
+        mixer.push(mixerLocal);
+    }
+    
+    }, onProgress, onError);
+}
+
+function onError() { };
+
+function onProgress ( xhr, model ) {
+    if ( xhr.lengthComputable ) {
+      var percentComplete = xhr.loaded / xhr.total * 100;
+    }
+}
+
+// Normalize scale and multiple by the newScale
+function normalizeAndRescale(obj, newScale)
+{
+  var scale = getMaxSize(obj); // Available in 'utils.js'
+  obj.scale.set(newScale * (1.0/scale),
+                newScale * (1.0/scale),
+                newScale * (1.0/scale));
+  return obj;
+}
+
+function fixPosition(obj)
+{
+  // Fix position of the object over the ground plane
+  var box = new THREE.Box3().setFromObject( obj );
+  if(box.min.y > 0)
+    obj.translateY(-box.min.y);
+  else
+    obj.translateY(-1*box.min.y);
+  return obj;
+}
 
 // run the rendering loop
 requestAnimationFrame(function animate(nowMsec)
@@ -230,16 +232,27 @@ requestAnimationFrame(function animate(nowMsec)
 	var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
 	lastTimeMsec	= nowMsec
 
+
+    var delta = clock.getDelta();
+    // Animation control
+    if (playAction)
+    {
+        for(var i = 0; i<mixer.length; i++)
+        mixer[i].update( delta );
+        //rotateMan(delta);
+    }
+
+
     let lerpAmount = 0.5;
 
-    if(markerArray[0].visible && markerArray[1].visible && markerArray[2].visible && 
+	if(markerArray[0].visible && markerArray[1].visible && markerArray[2].visible &&
        markerArray[3].visible && markerArray[4].visible){
         sceneA.visible = true;
-        
+  
         let p = markerArray[0].children[0].getWorldPosition();
         let q = markerArray[0].children[0].getWorldQuaternion();
         let s = markerArray[0].children[0].getWorldScale();
-        
+      
         sceneA.position.lerp(p, lerpAmount);
         sceneA.quaternion.slerp(q, lerpAmount);
         sceneA.scale.lerp(s, lerpAmount);
@@ -247,14 +260,14 @@ requestAnimationFrame(function animate(nowMsec)
         sceneA.visible = false;
     }
 
-    if(markerArray[1].visible && markerArray[2].visible && markerArray[3].visible && 
-       markerArray[4].visible){
+    if(markerArray[1].visible && markerArray[2].visible &&
+       markerArray[3].visible && markerArray[4].visible){
         sceneB.visible = true;
-        
+
         let p = markerArray[1].children[0].getWorldPosition();
         let q = markerArray[1].children[0].getWorldQuaternion();
         let s = markerArray[1].children[0].getWorldScale();
-        
+
         sceneB.position.lerp(p, lerpAmount);
         sceneB.quaternion.slerp(q, lerpAmount);
         sceneB.scale.lerp(s, lerpAmount);
