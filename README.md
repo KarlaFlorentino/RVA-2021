@@ -31,12 +31,12 @@
 
 #### T3
 
-[Ambiente 1](https://karlaflorentino.github.io/RVA-2021/T3/T3_Ambiente1.html)
+[Ambiente 1](https://karlaflorentino.github.io/RVA-2021/T3/t3_ex01.html)
 
-[Ambiente 2](https://karlaflorentino.github.io/RVA-2021/T3/T3_Ambiente2.html)
+[Ambiente 2](https://karlaflorentino.github.io/RVA-2021/T3/t3_ex02.html)
 
 [Ambiente 3](https://karlaflorentino.github.io/RVA-2021/T3/t3_ex03.html)
 
-[Ambiente 4](https://karlaflorentino.github.io/RVA-2021/T3/T3_Ambiente4.html)
+[Ambiente 4](https://karlaflorentino.github.io/RVA-2021/T3/t3_ex04.html)
 
-[Ambiente 5](https://karlaflorentino.github.io/RVA-2021/T3/T3_Ambiente5.html)
+[Ambiente 5](https://karlaflorentino.github.io/RVA-2021/T3/t3_ex05.html)
