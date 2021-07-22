@@ -260,6 +260,10 @@ requestAnimationFrame(function animate(nowMsec)
 
     else if(markerArray[1].visible && markerArray[2].visible &&
        markerArray[3].visible && markerArray[4].visible){
+        sceneA.visible = false;
+        sceneC.visible = false;
+        sceneD.visible = false;
+        sceneF.visible = false;
         sceneB.visible = true;
 
         let p = markerArray[1].children[0].getWorldPosition();
@@ -272,6 +276,10 @@ requestAnimationFrame(function animate(nowMsec)
     }
     
     else if(markerArray[2].visible && markerArray[3].visible && markerArray[4].visible){
+        sceneA.visible = false;
+        sceneB.visible = false;
+        sceneD.visible = false;
+        sceneF.visible = false;
         sceneC.visible = true;
         
         let p = markerArray[2].children[0].getWorldPosition();
@@ -284,6 +292,10 @@ requestAnimationFrame(function animate(nowMsec)
     }
     
     else if(markerArray[3].visible && markerArray[4].visible){
+        sceneA.visible = false;
+        sceneB.visible = false;
+        sceneC.visible = false;
+        sceneF.visible = false;
         sceneD.visible = true;
         
         let p = markerArray[3].children[0].getWorldPosition();
@@ -297,6 +309,10 @@ requestAnimationFrame(function animate(nowMsec)
     }
     
     else if(markerArray[4].visible){
+        sceneA.visible = false;
+        sceneB.visible = false;
+        sceneC.visible = false;
+        sceneD.visible = false;
         sceneF.visible = true;
         
         let p = markerArray[4].children[0].getWorldPosition();
