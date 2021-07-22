@@ -117,11 +117,8 @@ for (let i = 0; i < markerNames.length; i++)
 // Adding object to the scene
 var light = initDefaultSpotlight(scene, new THREE.Vector3(25, 30, 20)); 
 
-
 //----------------------------------------------------------------------------
-var man = null;
 var playAction = true;
-var time = 0;
 var mixer = new Array();
 
 // Load animated files
@@ -232,8 +229,7 @@ requestAnimationFrame(function animate(nowMsec)
 	var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
 	lastTimeMsec	= nowMsec
 
-
-    var delta = clock.getDelta();
+  var delta = clock.getDelta();
     // Animation control
     if (playAction)
     {
@@ -242,96 +238,77 @@ requestAnimationFrame(function animate(nowMsec)
         //rotateMan(delta);
     }
 
+  sceneA.visible = false;
+  sceneB.visible = false;
+  sceneC.visible = false;
+  sceneD.visible = false;
+  sceneF.visible = false;
 
-    let lerpAmount = 0.5;
+	let lerpAmount = 0.5;
 
 	if(markerArray[0].visible && markerArray[1].visible && markerArray[2].visible &&
-       markerArray[3].visible && markerArray[4].visible){
-        sceneA.visible = true;
-  
-        let p = markerArray[0].children[0].getWorldPosition();
-        let q = markerArray[0].children[0].getWorldQuaternion();
-        let s = markerArray[0].children[0].getWorldScale();
-      
-        sceneA.position.lerp(p, lerpAmount);
-        sceneA.quaternion.slerp(q, lerpAmount);
-        sceneA.scale.lerp(s, lerpAmount);
-    }
+		markerArray[3].visible && markerArray[4].visible){
+		sceneA.visible = true;
 
-    else if(markerArray[1].visible && markerArray[2].visible &&
-       markerArray[3].visible && markerArray[4].visible){
-        sceneA.visible = false;
-        sceneC.visible = false;
-        sceneD.visible = false;
-        sceneF.visible = false;
-        sceneB.visible = true;
+		let p = markerArray[0].children[0].getWorldPosition();
+		let q = markerArray[0].children[0].getWorldQuaternion();
+		let s = markerArray[0].children[0].getWorldScale();
+		
+		sceneA.position.lerp(p, lerpAmount);
+		sceneA.quaternion.slerp(q, lerpAmount);
+		sceneA.scale.lerp(s, lerpAmount);
+  }
 
-        let p = markerArray[1].children[0].getWorldPosition();
-        let q = markerArray[1].children[0].getWorldQuaternion();
-        let s = markerArray[1].children[0].getWorldScale();
+	else if(markerArray[1].visible && markerArray[2].visible &&
+		markerArray[3].visible && markerArray[4].visible){
+	 	sceneB.visible = true;
 
-        sceneB.position.lerp(p, lerpAmount);
-        sceneB.quaternion.slerp(q, lerpAmount);
-        sceneB.scale.lerp(s, lerpAmount);
-    }
+		let p = markerArray[1].children[0].getWorldPosition();
+		let q = markerArray[1].children[0].getWorldQuaternion();
+		let s = markerArray[1].children[0].getWorldScale();
+
+		sceneB.position.lerp(p, lerpAmount);
+		sceneB.quaternion.slerp(q, lerpAmount);
+		sceneB.scale.lerp(s, lerpAmount);
+ 	}
+ 
+ 	else if(markerArray[2].visible && markerArray[3].visible && markerArray[4].visible){
+		sceneC.visible = true;
+		 
+		let p = markerArray[2].children[0].getWorldPosition();
+		let q = markerArray[2].children[0].getWorldQuaternion();
+		let s = markerArray[2].children[0].getWorldScale();
+
+		sceneC.position.lerp(p, lerpAmount);
+		sceneC.quaternion.slerp(q, lerpAmount);
+		sceneC.scale.lerp(s, lerpAmount);
+ 	}
+ 
+ 	else if(markerArray[3].visible && markerArray[4].visible){
+		sceneD.visible = true;
+		 
+		let p = markerArray[3].children[0].getWorldPosition();
+		let q = markerArray[3].children[0].getWorldQuaternion();
+		let s = markerArray[3].children[0].getWorldScale();
+		let lerpAmount = 0.5;
+		 
+		sceneD.position.lerp(p, lerpAmount);
+		sceneD.quaternion.slerp(q, lerpAmount);
+		sceneD.scale.lerp(s, lerpAmount);
+	}
+ 
+ 	else if(markerArray[4].visible){
+		sceneF.visible = true;
+		 
+		let p = markerArray[4].children[0].getWorldPosition();
+		let q = markerArray[4].children[0].getWorldQuaternion();
+		let s = markerArray[4].children[0].getWorldScale();
+		 
+		sceneF.position.lerp(p, lerpAmount);
+		sceneF.quaternion.slerp(q, lerpAmount);
+		sceneF.scale.lerp(s, lerpAmount);
+ 	}
     
-    else if(markerArray[2].visible && markerArray[3].visible && markerArray[4].visible){
-        sceneA.visible = false;
-        sceneB.visible = false;
-        sceneD.visible = false;
-        sceneF.visible = false;
-        sceneC.visible = true;
-        
-        let p = markerArray[2].children[0].getWorldPosition();
-        let q = markerArray[2].children[0].getWorldQuaternion();
-        let s = markerArray[2].children[0].getWorldScale();
-
-        sceneC.position.lerp(p, lerpAmount);
-        sceneC.quaternion.slerp(q, lerpAmount);
-        sceneC.scale.lerp(s, lerpAmount);
-    }
-    
-    else if(markerArray[3].visible && markerArray[4].visible){
-        sceneA.visible = false;
-        sceneB.visible = false;
-        sceneC.visible = false;
-        sceneF.visible = false;
-        sceneD.visible = true;
-        
-        let p = markerArray[3].children[0].getWorldPosition();
-        let q = markerArray[3].children[0].getWorldQuaternion();
-        let s = markerArray[3].children[0].getWorldScale();
-        let lerpAmount = 0.5;
-        
-        sceneD.position.lerp(p, lerpAmount);
-        sceneD.quaternion.slerp(q, lerpAmount);
-        sceneD.scale.lerp(s, lerpAmount);
-    }
-    
-    else if(markerArray[4].visible){
-        sceneA.visible = false;
-        sceneB.visible = false;
-        sceneC.visible = false;
-        sceneD.visible = false;
-        sceneF.visible = true;
-        
-        let p = markerArray[4].children[0].getWorldPosition();
-        let q = markerArray[4].children[0].getWorldQuaternion();
-        let s = markerArray[4].children[0].getWorldScale();
-        
-        sceneF.position.lerp(p, lerpAmount);
-        sceneF.quaternion.slerp(q, lerpAmount);
-        sceneF.scale.lerp(s, lerpAmount);
-    }
-    
-    else{
-        sceneA.visible = false;
-        sceneB.visible = false;
-        sceneC.visible = false;
-        sceneD.visible = false;
-        sceneF.visible = false;
-    }
-
 	// call each update function
 	onRenderFcts.forEach(function(onRenderFct){
 		onRenderFct(deltaMsec/1000, nowMsec/1000)
