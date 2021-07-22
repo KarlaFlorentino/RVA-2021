@@ -344,6 +344,8 @@ requestAnimationFrame(function animate(nowMsec)
                     sceneAll.scale.lerp(s, lerpAmount);
 
                     break;
+                }else{
+                    sceneAll.visible = false;
                 }
             }
 
