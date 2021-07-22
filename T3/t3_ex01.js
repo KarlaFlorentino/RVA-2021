@@ -229,42 +229,41 @@ requestAnimationFrame(function animate(nowMsec)
 
 
 	if ( markerArray[0].visible )
-		{
-			//markerArray[0].children[0].add( sceneGroup );
-			sceneGroup.visible = true;
-			
-			let p = markerArray[0].children[0].getWorldPosition();
-			let q = markerArray[0].children[0].getWorldQuaternion();
-			let s = markerArray[0].children[0].getWorldScale();
-			let lerpAmount = 0.5;
-			
-			
-			sceneGroup.position.lerp(p, lerpAmount);
-			sceneGroup.quaternion.slerp(q, lerpAmount);
-			sceneGroup.scale.lerp(s, lerpAmount);
+	{
+		//markerArray[0].children[0].add( sceneGroup );
+		sceneGroup.visible = true;
+		
+		let p = markerArray[0].children[0].getWorldPosition();
+		let q = markerArray[0].children[0].getWorldQuaternion();
+		let s = markerArray[0].children[0].getWorldScale();
+		let lerpAmount = 0.5;
+		
+		
+		sceneGroup.position.lerp(p, lerpAmount);
+		sceneGroup.quaternion.slerp(q, lerpAmount);
+		sceneGroup.scale.lerp(s, lerpAmount);
 
-		}else{
-			sceneGroup.visible = false;
-		}
+	}else{
+		sceneGroup.visible = false;
+	}
 
-		if ( markerArray[1].visible )
-		{
-			sceneGroup2.visible = true;
-			
-			let p = markerArray[1].children[0].getWorldPosition();
-			let q = markerArray[1].children[0].getWorldQuaternion();
-			let s = markerArray[1].children[0].getWorldScale();
-			let lerpAmount = 0.5;
-			
-			
-			sceneGroup2.position.lerp(p, lerpAmount);
-			sceneGroup2.quaternion.slerp(q, lerpAmount);
-			sceneGroup2.scale.lerp(s, lerpAmount);
+	if ( markerArray[1].visible )
+	{
+		sceneGroup2.visible = true;
+		
+		let p = markerArray[1].children[0].getWorldPosition();
+		let q = markerArray[1].children[0].getWorldQuaternion();
+		let s = markerArray[1].children[0].getWorldScale();
+		let lerpAmount = 0.5;
+		
+		
+		sceneGroup2.position.lerp(p, lerpAmount);
+		sceneGroup2.quaternion.slerp(q, lerpAmount);
+		sceneGroup2.scale.lerp(s, lerpAmount);
 
-		}else{
-			sceneGroup2.visible = false;
-		}
-
+	}else{
+		sceneGroup2.visible = false;
+	}
 
 	// call each update function
 	onRenderFcts.forEach(function(onRenderFct){

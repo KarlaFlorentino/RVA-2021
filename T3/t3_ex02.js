@@ -18,7 +18,6 @@ scene.add(camera);
 // array of functions for the rendering loop
 var onRenderFcts= [];
 
-
 //----------------------------------------------------------------------------
 // Handle arToolkitSource
 // More info: https://ar-js-org.github.io/AR.js-Docs/marker-based/
@@ -230,129 +229,125 @@ requestAnimationFrame(function animate(nowMsec)
 	var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
 	lastTimeMsec	= nowMsec
 
-    let lerpAmount = 0.5;
+  let lerpAmount = 0.5;
 
 	if ( markerArray[6].visible )
-		{
-            if(markerArray[0].visible){
-                sceneA.visible = true;
-                
-                let p = markerArray[0].children[0].getWorldPosition();
-                let q = markerArray[0].children[0].getWorldQuaternion();
-                let s = markerArray[0].children[0].getWorldScale();
-                
-                sceneA.position.lerp(p, lerpAmount);
-                sceneA.quaternion.slerp(q, lerpAmount);
-                sceneA.scale.lerp(s, lerpAmount);
-            }else{
-                sceneA.visible = false;
-            }
+	{
+		if(markerArray[0].visible){
+			sceneA.visible = true;
+				
+			let p = markerArray[0].children[0].getWorldPosition();
+			let q = markerArray[0].children[0].getWorldQuaternion();
+			let s = markerArray[0].children[0].getWorldScale();
+				
+			sceneA.position.lerp(p, lerpAmount);
+			sceneA.quaternion.slerp(q, lerpAmount);
+			sceneA.scale.lerp(s, lerpAmount);
+		}else{
+				sceneA.visible = false;
+		}
 
-            if(markerArray[1].visible){
-                sceneB.visible = true;
-                
-                let p = markerArray[1].children[0].getWorldPosition();
-                let q = markerArray[1].children[0].getWorldQuaternion();
-                let s = markerArray[1].children[0].getWorldScale();
-                
-                sceneB.position.lerp(p, lerpAmount);
-                sceneB.quaternion.slerp(q, lerpAmount);
-                sceneB.scale.lerp(s, lerpAmount);
-            }else{
-                sceneB.visible = false;
-            }
-            
-            if(markerArray[2].visible){
-                sceneC.visible = true;
-                
-                let p = markerArray[2].children[0].getWorldPosition();
-                let q = markerArray[2].children[0].getWorldQuaternion();
-                let s = markerArray[2].children[0].getWorldScale();
-
-                sceneC.position.lerp(p, lerpAmount);
-                sceneC.quaternion.slerp(q, lerpAmount);
-                sceneC.scale.lerp(s, lerpAmount);
-            }else{
-                sceneC.visible = false;
-            }
-            
-            if(markerArray[3].visible){
-                sceneD.visible = true;
-                
-                let p = markerArray[3].children[0].getWorldPosition();
-                let q = markerArray[3].children[0].getWorldQuaternion();
-                let s = markerArray[3].children[0].getWorldScale();
-                let lerpAmount = 0.5;
-                
-                sceneD.position.lerp(p, lerpAmount);
-                sceneD.quaternion.slerp(q, lerpAmount);
-                sceneD.scale.lerp(s, lerpAmount);
-            }else{
-                sceneD.visible = false;
-            }
+		if(markerArray[1].visible){
+			sceneB.visible = true;
 			
-            if(markerArray[4].visible){
-                sceneF.visible = true;
-                
-                let p = markerArray[4].children[0].getWorldPosition();
-                let q = markerArray[4].children[0].getWorldQuaternion();
-                let s = markerArray[4].children[0].getWorldScale();
-                
-                sceneF.position.lerp(p, lerpAmount);
-                sceneF.quaternion.slerp(q, lerpAmount);
-                sceneF.scale.lerp(s, lerpAmount);
-            }else{
-                sceneF.visible = false;
-            }
+			let p = markerArray[1].children[0].getWorldPosition();
+			let q = markerArray[1].children[0].getWorldQuaternion();
+			let s = markerArray[1].children[0].getWorldScale();
+			
+			sceneB.position.lerp(p, lerpAmount);
+			sceneB.quaternion.slerp(q, lerpAmount);
+			sceneB.scale.lerp(s, lerpAmount);
+		}else{
+				sceneB.visible = false;
+		}
 
-            if(markerArray[5].visible){
-                sceneG.visible = true;
-                
-                let p = markerArray[5].children[0].getWorldPosition();
-                let q = markerArray[5].children[0].getWorldQuaternion();
-                let s = markerArray[5].children[0].getWorldScale();
-                
-                sceneG.position.lerp(p, lerpAmount);
-                sceneG.quaternion.slerp(q, lerpAmount);
-                sceneG.scale.lerp(s, lerpAmount);
-            }else{
-                sceneG.visible = false;
-            }
+		if(markerArray[2].visible){
+			sceneC.visible = true;
+				
+			let p = markerArray[2].children[0].getWorldPosition();
+			let q = markerArray[2].children[0].getWorldQuaternion();
+			let s = markerArray[2].children[0].getWorldScale();
 
-        }else{
-            sceneA.visible = false;
-            sceneB.visible = false;
-            sceneC.visible = false;
-            sceneD.visible = false;
-            sceneF.visible = false;
-            sceneG.visible = false;
+			sceneC.position.lerp(p, lerpAmount);
+			sceneC.quaternion.slerp(q, lerpAmount);
+			sceneC.scale.lerp(s, lerpAmount);
+		}else{
+				sceneC.visible = false;
+		}
 
-        }
+	if(markerArray[3].visible){
+		sceneD.visible = true;
+			
+		let p = markerArray[3].children[0].getWorldPosition();
+		let q = markerArray[3].children[0].getWorldQuaternion();
+		let s = markerArray[3].children[0].getWorldScale();
+		let lerpAmount = 0.5;
+			
+		sceneD.position.lerp(p, lerpAmount);
+		sceneD.quaternion.slerp(q, lerpAmount);
+		sceneD.scale.lerp(s, lerpAmount);
+	}else{
+			sceneD.visible = false;
+	}
 
-        if ( markerArray[7].visible ){
+	if(markerArray[4].visible){
+		sceneF.visible = true;
+			
+		let p = markerArray[4].children[0].getWorldPosition();
+		let q = markerArray[4].children[0].getWorldQuaternion();
+		let s = markerArray[4].children[0].getWorldScale();
+			
+		sceneF.position.lerp(p, lerpAmount);
+		sceneF.quaternion.slerp(q, lerpAmount);
+		sceneF.scale.lerp(s, lerpAmount);
+	}else{
+			sceneF.visible = false;
+	}
 
-            for(var i = 0; i < markerArray.length - 2; i++){
-                if(markerArray[i].visible){
-                    sceneAll.visible = true;
+	if(markerArray[5].visible){
+		sceneG.visible = true;
+			
+		let p = markerArray[5].children[0].getWorldPosition();
+		let q = markerArray[5].children[0].getWorldQuaternion();
+		let s = markerArray[5].children[0].getWorldScale();
+			
+		sceneG.position.lerp(p, lerpAmount);
+		sceneG.quaternion.slerp(q, lerpAmount);
+		sceneG.scale.lerp(s, lerpAmount);
+	}else{
+			sceneG.visible = false;
+	}
 
-                    let p = markerArray[i].children[0].getWorldPosition();
-                    let q = markerArray[i].children[0].getWorldQuaternion();
-                    let s = markerArray[i].children[0].getWorldScale();
-                    
-                    sceneAll.position.lerp(p, lerpAmount);
-                    sceneAll.quaternion.slerp(q, lerpAmount);
-                    sceneAll.scale.lerp(s, lerpAmount);
+	}else{
+		sceneA.visible = false;
+		sceneB.visible = false;
+		sceneC.visible = false;
+		sceneD.visible = false;
+		sceneF.visible = false;
+		sceneG.visible = false;
+	}
 
-                    break;
-                }else{
-                    sceneAll.visible = false;
-                }
-            }
+	if ( markerArray[7].visible ){
+		for(var i = 0; i < markerArray.length - 2; i++){
+			if(markerArray[i].visible){
+				sceneAll.visible = true;
 
-        }else{
-            sceneAll.visible = false;
-        }
+				let p = markerArray[i].children[0].getWorldPosition();
+				let q = markerArray[i].children[0].getWorldQuaternion();
+				let s = markerArray[i].children[0].getWorldScale();
+						
+				sceneAll.position.lerp(p, lerpAmount);
+				sceneAll.quaternion.slerp(q, lerpAmount);
+				sceneAll.scale.lerp(s, lerpAmount);
 
+				break;
+			}else{
+				sceneAll.visible = false;
+			}
+		}
+	}else{
+		sceneAll.visible = false;
+	}
 
 	// call each update function
 	onRenderFcts.forEach(function(onRenderFct){
