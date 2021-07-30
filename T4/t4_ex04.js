@@ -160,20 +160,21 @@ function createScene()
 	var modelName = 'scene.gltf';
 
 
-    modelPath = 'objects/de_sterrennacht__nit_estelada__the_starry_night/';
+	modelPath = 'objects/de_sterrennacht__nit_estelada__the_starry_night/';
 	loader.load( modelPath + modelName, function ( gltf ) {
 	var obj = gltf.scene;
 		obj = normalizeAndRescale(obj, 7);
         obj.position.set(7,4.5,-20);
 	scene.add ( obj );
-    }, null, null);
+    }, null, null)
 
-    modelPath = 'objects/la_famille_jouvenel_des_ursins_1446-1449/';
+    modelPath = 'objects/picture_frame/';
 	loader.load( modelPath + modelName, function ( gltf ) {
 	var obj = gltf.scene;
-		obj = normalizeAndRescale(obj, 6);
-		obj.rotateY(degreesToRadians(90));		
-        obj.position.set(2,4.5,-17);
+		obj = normalizeAndRescale(obj, 4);
+		obj.rotateY(degreesToRadians(90));
+		obj.rotateX(degreesToRadians(45));		
+        obj.position.set(0,4,-15);
 	scene.add ( obj );
     }, null, null);
 
