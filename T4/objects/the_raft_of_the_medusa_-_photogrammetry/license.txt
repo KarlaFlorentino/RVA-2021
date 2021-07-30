@@ -1,0 +1,11 @@
+Model Information:
+* title:	The Raft of the Medusa - photogrammetry
+* source:	https://sketchfab.com/3d-models/the-raft-of-the-medusa-photogrammetry-408bed37105f4851979ecd40c03d44dd
+* author:	Nicolas Diolez (https://sketchfab.com/nicolasdiolez)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "The Raft of the Medusa - photogrammetry" (https://sketchfab.com/3d-models/the-raft-of-the-medusa-photogrammetry-408bed37105f4851979ecd40c03d44dd) by Nicolas Diolez (https://sketchfab.com/nicolasdiolez) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
