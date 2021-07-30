@@ -171,9 +171,10 @@ function createScene()
     modelPath = 'objects/picture_frame/';
 	loader.load( modelPath + modelName, function ( gltf ) {
 	var obj = gltf.scene;
-		obj = normalizeAndRescale(obj, 6);
-		obj.rotateY(degreesToRadians(90));		
-        obj.position.set(2,4.5,-17);
+		obj = normalizeAndRescale(obj, 4);
+		obj.rotateY(degreesToRadians(90));
+		obj.rotateX(degreesToRadians(45));		
+        obj.position.set(0,4,-15);
 	scene.add ( obj );
     }, null, null);
 
