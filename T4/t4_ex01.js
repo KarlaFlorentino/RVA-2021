@@ -29,7 +29,7 @@ camera.layers.enable( 1 );
 const geometry = new THREE.SphereGeometry( 1000, 60, 60 );
 	geometry.scale( - 1, 1, 1 ); // invert the geometry on the x-axis (faces will point inward)
 const loader = new THREE.TextureLoader();
-const texture = loader.load( 'textures/paisagem.jpg' );
+const texture = loader.load( 'textures/download.jpg' );
 const material = new THREE.MeshBasicMaterial( { map: texture } )
 const mesh = new THREE.Mesh( geometry, material );
 scene.add( mesh );
