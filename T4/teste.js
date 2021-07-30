@@ -168,7 +168,7 @@ function createScene()
 	scene.add ( obj );
     }, null, null)*/
 
-    modelPath = 'objects/la_famille_jouvenel_des_ursins_1446-1449/';
+    modelPath = 'objects/la_famille_jouvenel_des_ursins/';
 	loader.load( modelPath + modelName, function ( gltf ) {
 	var obj = gltf.scene;
 		obj = normalizeAndRescale(obj, 6);
