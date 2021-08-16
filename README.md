@@ -51,3 +51,8 @@
 [Ambiente 4](https://karlaflorentino.github.io/RVA-2021/T4/t4_ex04.html)
 
 [Ambiente 5](https://karlaflorentino.github.io/RVA-2021/T4/t4_ex05.html)
+
+
+#### T6
+
+[Projeto individual](https://karlaflorentino.github.io/RVA-2021/T6/scene.html)
