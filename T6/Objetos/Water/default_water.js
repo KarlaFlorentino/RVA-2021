@@ -14,7 +14,7 @@ import {
 	Vector3,
 	Vector4,
 	WebGLRenderTarget
-} from '../../build/three.module.js';
+} from '../../../../build/three.module.js';
 
 import dwfs from "./default_water_fragment_shader.glsl.js"
 import dwvs from "./default_water_vertex_shader.glsl.js"
