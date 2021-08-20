@@ -7,6 +7,7 @@ import {onWindowResize,
 
 //import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
 import { Sky } from './Sky.js';
+import { Water } from './Objetos/Water/default_water.js';
 
 
 //-----------------------------------------------------------------------------------------------
@@ -43,7 +44,7 @@ var controller1 = renderer.xr.getController( 0 );
 	controller1.addEventListener( 'selectend', onSelectEnd );
 camera.add( controller1 );
 
-let sky, sun;
+let sky, sun, water;
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 createScene();
@@ -89,7 +90,8 @@ function animate()
 }
 
 function render() {
-	move();
+	water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
+    move();
 	renderer.render( scene, camera );
 }
 
@@ -101,31 +103,32 @@ function render() {
 function createScene()
 {
     // Light stuff 
-	const light = new THREE.PointLight(0xaaaaaa);
-    light.position.set(30,30,20);
-    light.castShadow = true;
-    light.distance = 0;
-    light.shadow.mapSize.width = 1024;
-    light.shadow.mapSize.height = 1024;	
-    scene.add(light);
+	// const light = new THREE.PointLight(0xaaaaaa);
+    // light.position.set(30,30,20);
+    // light.castShadow = true;
+    // light.distance = 0;
+    // light.shadow.mapSize.width = 1024;
+    // light.shadow.mapSize.height = 1024;	
+    // scene.add(light);
 
-    var ambientLight = new THREE.AmbientLight(0x121212);
-        scene.add(ambientLight);
+    // var ambientLight = new THREE.AmbientLight(0x121212);
+    //     scene.add(ambientLight);
 
     // Load all textures 
-    var textureLoader = new THREE.TextureLoader();
-        var floor 	= textureLoader.load('../assets/textures/sand.jpg');		
+    // var textureLoader = new THREE.TextureLoader();
+    // var floor 	= textureLoader.load('../assets/textures/sand.jpg');		
 
-    // Create Ground Plane
-    var groundPlane = createGroundPlane(80.0, 80.0, 100, 100, "rgb(200,200,150)");
-        groundPlane.rotateX(degreesToRadians(-90));
-        groundPlane.material.map = floor;		
-        groundPlane.material.map.wrapS = THREE.RepeatWrapping;
-        groundPlane.material.map.wrapT = THREE.RepeatWrapping;
-        groundPlane.material.map.repeat.set(8,8);		
-    scene.add(groundPlane);
+    // // Create Ground Plane
+    // var groundPlane = createGroundPlane(80.0, 80.0, 100, 100, "rgb(200,200,150)");
+    //     groundPlane.rotateX(degreesToRadians(-90));
+    //     groundPlane.material.map = floor;		
+    //     groundPlane.material.map.wrapS = THREE.RepeatWrapping;
+    //     groundPlane.material.map.wrapT = THREE.RepeatWrapping;
+    //     groundPlane.material.map.repeat.set(8,8);		
+    // scene.add(groundPlane);
 
 
+    initOcean();
 	initSky();
 }
 
@@ -135,7 +138,7 @@ function initSky() {
 
     // Add Sky
     sky = new Sky();
-    sky.scale.setScalar( 450000 );
+    sky.scale.setScalar( 50000 );
     scene.add( sky );
 
     sun = new THREE.Vector3();
@@ -166,6 +169,7 @@ function initSky() {
         sun.setFromSphericalCoords( 1, phi, theta );
 
         uniforms[ 'sunPosition' ].value.copy( sun );
+        water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
 
         renderer.toneMappingExposure = effectController.exposure;
         renderer.render( scene, camera );
@@ -185,4 +189,34 @@ function initSky() {
     
     guiChanged();
 
+}
+
+
+function initOcean()
+{
+    const waterGeometry = new THREE.PlaneGeometry( 50000, 50000 );
+    water = new Water(
+        waterGeometry,
+        {
+            textureWidth: 512,
+            textureHeight: 512,
+            waterNormals: new THREE.TextureLoader().load( '../assets/textures/waternormals.jpg', function ( texture ) {
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            } ),
+            sunDirection: new THREE.Vector3(),
+            sunColor: 0xffffff,
+            waterColor: 0x001e0f,
+            distortionScale: 3.7,
+            fog: scene.fog !== undefined
+        }
+    );
+    water.rotation.x = - Math.PI / 2;
+    scene.add( water );
+
+    // const waterUniforms = water.material.uniforms;
+
+    // const folderWater = gui.addFolder( 'Water' );
+    // folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
+    // folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+    // folderWater.open();
 }
