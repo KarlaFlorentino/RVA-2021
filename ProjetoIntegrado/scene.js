@@ -6,8 +6,8 @@ import {onWindowResize,
 		createGroundPlane} from "../libs/util/util.js";
 
 //import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
-import { Sky } from './Sky.js';
-import { Water } from './Objetos/Water/default_water.js';
+import { Sky } from './assets/objects/Sky/Sky.js';
+import { Water } from './assets/objects/Water/default_water.js';
 
 
 //-----------------------------------------------------------------------------------------------
