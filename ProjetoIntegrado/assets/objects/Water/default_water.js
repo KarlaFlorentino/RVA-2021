@@ -16,8 +16,8 @@ import {
 	WebGLRenderTarget
 } from '../../../../build/three.module.js';
 
-import dwfs from "./default_water_fragment_shader.glsl.js"
-import dwvs from "./default_water_vertex_shader.glsl.js"
+import dwfs from "./shaders/default_water_fragment_shader.glsl.js"
+import dwvs from "./shaders/default_water_vertex_shader.glsl.js"
 
 /**
  * Work based on :
