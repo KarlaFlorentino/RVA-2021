@@ -5,7 +5,8 @@ import {onWindowResize,
 		degreesToRadians,
 		createGroundPlane} from "../libs/util/util.js";
 
-//import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
+import Stats from '../build/jsm/libs/stats.module.js';
+import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
 import { Sky } from './assets/objects/Sky/Sky.js';
 import { Water } from './assets/objects/Water/default_water.js';
 
@@ -24,6 +25,8 @@ let renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.xr.enabled = true;
 	renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.7;
 	renderer.shadowMap.enabled = true;
 
 //-- Setting scene and camera -------------------------------------------------------------------
@@ -34,6 +37,7 @@ let moveCamera; // Move when a button is pressed
 //-- 'Camera Holder' to help moving the camera
 const cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
+cameraHolder.position.set(0,5,20);
 scene.add( cameraHolder );
 //-- Create VR button and settings ---------------------------------------------------------------
 document.body.appendChild( VRButton.createButton( renderer ) );
@@ -44,7 +48,13 @@ var controller1 = renderer.xr.getController( 0 );
 	controller1.addEventListener( 'selectend', onSelectEnd );
 camera.add( controller1 );
 
+let container = document.getElementById( 'container' );
+container.appendChild( renderer.domElement );
+
 let sky, sun, water;
+
+const stats = Stats();
+document.body.appendChild(stats.dom);
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 createScene();
@@ -90,6 +100,7 @@ function animate()
 }
 
 function render() {
+    stats.update();
 	water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
     move();
 	renderer.render( scene, camera );
@@ -146,12 +157,18 @@ function initSky() {
     /// GUI
 
     const effectController = {
-        turbidity: 10,
+        turbidity: 2,
+        rayleigh: 1,
+        mieCoefficient: 0.005,
+        mieDirectionalG: 0.950,
+        elevation: 0.7,
+        azimuth: 180,
+        /*turbidity: 10,
         rayleigh: 3,
         mieCoefficient: 0.005,
         mieDirectionalG: 0.7,
         elevation: 2,
-        azimuth: 180,
+        azimuth: 180,*/
         exposure: renderer.toneMappingExposure
     };
 
@@ -184,8 +201,8 @@ function initSky() {
     gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
     gui.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
     gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
-    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
-    */
+    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );*/
+    
     
     guiChanged();
 
