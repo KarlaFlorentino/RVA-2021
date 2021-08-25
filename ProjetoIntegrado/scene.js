@@ -55,6 +55,17 @@ container.appendChild( renderer.domElement );
 
 let sky, sun, water;
 
+const effectController = {
+    turbidity: 2,
+    rayleigh: 1,
+    mieCoefficient: 0.005,
+    mieDirectionalG: 0.950,
+    elevation: 0.7,
+    azimuth: 180,
+    exposure: renderer.toneMappingExposure
+};
+
+
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
@@ -97,6 +108,49 @@ function onSelectEnd( )
 	moveCamera = false;
 }
 
+function sunrise_to_sunset(){
+
+    //Amanhecer
+    if(effectController.elevation < 10){
+        effectController.turbidity = 2;
+        effectController.rayleigh = 1;
+        effectController.mieCoefficient = 0.005;
+        effectController.mieDirectionalG = 0.950;
+    }
+
+    //Ao longo do dia
+    else if(effectController.elevation > 10 && effectController.elevation < 177){
+        effectController.turbidity = 10;
+        effectController.rayleigh = 3;
+        effectController.mieCoefficient = 0.05;
+        effectController.mieDirectionalG = 0.999;
+    }
+       
+    //Por do sol
+    else if(effectController.elevation > 177){
+        effectController.turbidity = 20;
+        effectController.rayleigh = 3;
+        effectController.mieCoefficient = 0.005;
+        effectController.mieDirectionalG = 0.950;
+    }
+    
+    if(effectController.elevation < 180){
+        effectController.elevation += 0.03;
+    }else{
+        effectController.elevation = 0.7;
+    }    
+        
+    const phi = THREE.MathUtils.degToRad( 180 - effectController.elevation );
+    const theta = THREE.MathUtils.degToRad( effectController.azimuth );
+
+    sun.setFromSphericalCoords( 1, phi, theta );
+
+    sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
+    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+
+    guiChanged();
+}
+
 //-- Main loop -----------------------------------------------------------------------------------
 function animate() 
 {
@@ -106,6 +160,9 @@ function animate()
 function render() {
     stats.update();
 	water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
+
+    sunrise_to_sunset();
+
     move();
 	renderer.render( scene, camera );
 }
@@ -149,6 +206,27 @@ function createScene()
 }
 
 
+function guiChanged() {
+
+    const uniforms = sky.material.uniforms;
+    uniforms[ 'turbidity' ].value = effectController.turbidity;
+    uniforms[ 'rayleigh' ].value = effectController.rayleigh;
+    uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
+    uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
+
+    const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
+    const theta = THREE.MathUtils.degToRad( effectController.azimuth );
+
+    sun.setFromSphericalCoords( 1, phi, theta );
+
+    uniforms[ 'sunPosition' ].value.copy( sun );
+    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+
+    renderer.toneMappingExposure = effectController.exposure;
+    renderer.render( scene, camera );
+
+}
+
 
 function initSky() {
 
@@ -161,42 +239,15 @@ function initSky() {
 
     /// GUI
 
-    const effectController = {
-        turbidity: 2,
-        rayleigh: 1,
-        mieCoefficient: 0.005,
-        mieDirectionalG: 0.950,
-        elevation: 0.7,
-        azimuth: 180,
-        /*turbidity: 10,
+    /*const effectController = {
+        turbidity: 10,
         rayleigh: 3,
         mieCoefficient: 0.005,
         mieDirectionalG: 0.7,
         elevation: 2,
-        azimuth: 180,*/
+        azimuth: 180,
         exposure: renderer.toneMappingExposure
-    };
-
-    function guiChanged() {
-
-        const uniforms = sky.material.uniforms;
-        uniforms[ 'turbidity' ].value = effectController.turbidity;
-        uniforms[ 'rayleigh' ].value = effectController.rayleigh;
-        uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
-        uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
-
-        const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
-        const theta = THREE.MathUtils.degToRad( effectController.azimuth );
-
-        sun.setFromSphericalCoords( 1, phi, theta );
-
-        uniforms[ 'sunPosition' ].value.copy( sun );
-        water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
-
-        renderer.toneMappingExposure = effectController.exposure;
-        renderer.render( scene, camera );
-
-    }
+    };*/
 
     /*const gui = new GUI();
 
@@ -204,15 +255,14 @@ function initSky() {
     gui.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
     gui.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
     gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
-    gui.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'elevation', 0, 180, 0.1 ).onChange( guiChanged );
     gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
-    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );*/
+    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
     
-    
+    */
     guiChanged();
 
 }
-
 
 function initDefaultOcean()
 {
