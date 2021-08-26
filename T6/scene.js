@@ -35,7 +35,7 @@ let moveCamera; // Move when a button is pressed
 //-- 'Camera Holder' to help moving the camera
 const cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
-cameraHolder.position.set(0,5,20);
+cameraHolder.position.set(0,6,20);
 scene.add( cameraHolder );
 //-- Create VR button and settings ---------------------------------------------------------------
 document.body.appendChild( VRButton.createButton( renderer ) );
@@ -167,9 +167,30 @@ function render() {
 //-- Create Scene --------------------------------------------------------------------------------
 function createScene(){
     // Load all textures 
-     var textureLoader = new THREE.TextureLoader();
-     var floor 	= textureLoader.load('../assets/textures/sand.jpg');		
 
+    var width = 100;
+    var length = 100;
+    
+    var textureLoader = new THREE.TextureLoader();
+    var texture = textureLoader.load('../assets/textures/sand.jpg', function(tx) {
+        var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
+        planeGeometry.translate(0.0, 0.0, 5); // To avoid conflict with the axeshelper
+          
+        var planeMaterial = new THREE.MeshBasicMaterial({
+            map: tx,
+            side: THREE.DoubleSide,
+            wireframe: false
+        });
+        
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.rotateX(degreesToRadians(-90));
+        scene.add( plane );
+    });
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set( width, length );
+		
+/*
     // create the ground plane
     var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
     planeGeometry.translate(0.0, 0.0, 1); // To avoid conflict with the axeshelper
@@ -178,9 +199,12 @@ function createScene(){
         side: THREE.DoubleSide,
     });
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    //plane.material.map.repeat.set(800,800);
+    //     groundPlane.material.map.wrapT = THREE.RepeatWrapping;
+    //     groundPlane.material.map.repeat.set(8,8);	
     plane.rotateX(degreesToRadians(-90));
     // add the plane to the scene
-    scene.add(plane);
+    scene.add(plane);*/
 
 	initSky();
     
