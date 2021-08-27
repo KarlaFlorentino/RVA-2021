@@ -1,6 +1,7 @@
 import {
     Color,
     FrontSide,
+    DoubleSide,
     LinearFilter,
     MathUtils,
     Matrix4,
@@ -16,8 +17,11 @@ import {
     WebGLRenderTarget
 } from '../../../../build/three.module.js';
 
-import WavesFragment from './shaders/custom_water_fragment_shader.glsl.js';
+import CustomWavesFragment from './shaders/custom_water_fragment_shader.glsl.js';
+import DefaultWavesFragment from './shaders/default_water_fragment_shader.glsl.js';
+
 import WavesVertex from './shaders/custom_water_vertex_shader.glsl.js';
+import DefaultWavesVertex from './shaders/default_water_vertex_shader.glsl.js';
 import { getCoefficientsTexture } from './utils/coefficients.js';
 
 let Waves = function(geometry, options = {})
@@ -85,7 +89,7 @@ let Waves = function(geometry, options = {})
             {
                 normalSampler: { value: null },
                 reflectionSampler: { value: null },
-                refractionSampler: { value: null },
+                // refractionSampler: { value: null },
                 alpha: { value: 1.0 },
                 time: { value: 0.0 },
                 size: { value: 1.0 },//2.7
@@ -108,7 +112,10 @@ let Waves = function(geometry, options = {})
         ]),
 
         vertexShader: WavesVertex,
-        fragmentShader: WavesFragment
+        // vertexShader: DefaultWavesVertex,
+        fragmentShader: CustomWavesFragment
+        // fragmentShader: BasicWavesFragment
+        // fragmentShader: DefaultWavesFragment
     };
 
     let material = new ShaderMaterial({
@@ -118,11 +125,12 @@ let Waves = function(geometry, options = {})
         lights: true,
         side: side,
         fog: fog,
+        transparent: true,
         // wireframe: true
     });
 
     material.uniforms.reflectionSampler.value = renderTarget.texture;
-    material.uniforms.refractionSampler.value = renderTarget.texture;
+    // material.uniforms.refractionSampler.value = renderTarget.texture;
     material.uniforms.textureMatrix.value = textureMatrix;
     material.uniforms.alpha.value = alpha;
     material.uniforms.time.value = time;
