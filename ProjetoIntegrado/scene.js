@@ -41,6 +41,24 @@ const cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
 cameraHolder.position.set(0, 50, 20);
 scene.add( cameraHolder );
+
+// create an AudioListener and add it to the camera
+const listener = new THREE.AudioListener();
+cameraHolder.add( listener );
+
+// create a global audio source
+const oceanSound = new THREE.Audio( listener );
+
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( './assets/objects/Water/sounds/sea.wav', function( buffer ) {
+	oceanSound.setBuffer( buffer );
+	oceanSound.setLoop( true );
+	oceanSound.setVolume( 0.5 );
+	oceanSound.play();
+});
+
+
 //-- Create VR button and settings ---------------------------------------------------------------
 document.body.appendChild( VRButton.createButton( renderer ) );
 
@@ -232,7 +250,7 @@ function initSky() {
 
     // Add Sky
     sky = new Sky();
-    sky.scale.setScalar( 50000 );
+    sky.scale.setScalar( 10000 );
     scene.add( sky );
 
     sun = new THREE.Vector3();
@@ -277,7 +295,7 @@ function initDefaultOcean()
             } ),
             sunDirection: new THREE.Vector3(),
             sunColor: 0xffffff,
-            waterColor: 0x001e0f,
+            waterColor: 0x00eeff,
             distortionScale: 3.7,
             fog: scene.fog !== undefined
         }
@@ -296,7 +314,7 @@ function initDefaultOcean()
 function initCustomOcean()
 {
      // Water
-    let waterGeometry = new PlaneBufferGeometry(10000, 10000, 2500, 2500);
+    let waterGeometry = new PlaneBufferGeometry(10000, 10000, 512, 512);
 
     water = new CustomWater(
         waterGeometry,
@@ -307,16 +325,17 @@ function initCustomOcean()
             texture.wrapS = texture.wrapT = RepeatWrapping; 
         }),
 
-        alpha:         .5,
+        alpha:         1.0,
         sunDirection:  new THREE.Vector3(),
         sunColor:      0xffffff,
         waterColor:    0x00eeff,
-        direction:     .88,
-        frequency:     .025,
-        amplitude:     7.5,
-        steepness:     .0,
-        speed:         1.0,
-        manyWaves:     0
+        direction:     1.35,
+        frequency:     0.02,
+        amplitude:     10.0,
+        steepness:     0.2,
+        speed:         1.25,
+        manyWaves:     0,
+        side: THREE.DoubleSide
         }
     );
     water.rotation.x = -Math.PI / 2;

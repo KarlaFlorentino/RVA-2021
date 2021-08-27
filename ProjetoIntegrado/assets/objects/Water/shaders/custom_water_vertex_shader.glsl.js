@@ -31,33 +31,34 @@ varying vec3 vvnormal;
 
 const int NB_WAVES = 16;
 
-void addWave(
-    float x, float y,
-    float frequencyI, float amplitudeI, float steepnessI, float directionI, float phaseI,
-    inout vec3 o, bool doIt)
+void addWave(float x, float y, float frequencyI, float amplitudeI, 
+    float steepnessI, float directionI, float phaseI, inout vec3 o, bool doIt)
 {
     if (!doIt) return;
     vec2 d = vec2(cos(directionI), sin(directionI));
+    
     float s = steepnessI / (clamp(amplitudeI, 0.01, 1e7) * frequencyI);
     float sa = s * amplitudeI;
     float fdotpht = frequencyI * dot(d, vec2(x, y)) + phaseI * time;
     float sacf = sa * cos(fdotpht);
+    
     o.x += d.x * sacf;
     o.y += d.y * sacf;
     o.z += amplitudeI * sin(fdotpht);
 }
 
-void addWaveNormal(
-    float x, float y,
-    float frequencyI, float amplitudeI, float steepnessI, float directionI, float phaseI,
-    vec3 p, inout vec3 n, bool doIt)
+void addWaveNormal(float x, float y, float frequencyI, float amplitudeI, 
+    float steepnessI, float directionI, float phaseI, vec3 p, inout vec3 n, bool doIt)
 {
     if (!doIt) return;
+    
     vec2 d = vec2(cos(directionI), sin(directionI));
+    
     float s = steepnessI / (clamp(amplitudeI, 0.01, 1e7) * frequencyI);
     float fa = frequencyI * amplitudeI;
     float fdpt = frequencyI * dot(vec3(d, 0.0), p) + phaseI * time;
     float facf = fa * cos(fdpt);
+    
     n.x -= (d.x * facf );
     n.y -= (d.y * facf );
     n.z -= (s * fa * sin(fdpt) );
@@ -73,15 +74,19 @@ vec3 gerstnerPositions(float x, float y)
     for (int i = 0; i < NB_WAVES; i++)
     {
         if (i >= wavesToAdd) break;
+        
         tx++; if (tx > 7.0) { tx = 0.0; ty++; }
         vec4 rgb1 = texture2D(coefficientSampler, vec2(tx + 0.01, ty + 0.01) / 8.0);
+        
         tx++; if (tx > 7.0) { tx = 0.0; ty++; }
         vec4 rgb2 = texture2D(coefficientSampler, vec2(tx + 0.01, ty + 0.01) / 8.0);
+        
         float directionI = float(rgb1.r) * 2.0 * 3.1415;
         float frequencyI = float(rgb1.g) * 0.4;
         float amplitudeI = float(rgb1.b) * 40.0;
         float steepnessI = float(rgb2.r) * 1.0;
         float phaseI     = float(rgb2.g) * 5.0;
+        
         addWave(x, y, frequencyI, amplitudeI, steepnessI, directionI, phaseI, o, true); // i == wavesToAdd - 1);
     }
 
@@ -98,15 +103,19 @@ vec3 gerstnerNormals(float x, float y, vec3 p)
     for (int i = 0; i < NB_WAVES; i++)
     {
         if (i >= wavesToAdd) break;
+        
         tx++; if (tx > 7.0) { tx = 0.0; ty++; }
         vec4 rgb1 = texture2D(coefficientSampler, vec2(tx + 0.01, ty + 0.01) / 8.0);
+        
         tx++; if (tx > 7.0) { tx = 0.0; ty++; }
         vec4 rgb2 = texture2D(coefficientSampler, vec2(tx + 0.01, ty + 0.01) / 8.0);
+        
         float directionI = float(rgb1.r) * 2.0 * 3.1415;
         float frequencyI = float(rgb1.g) * 0.1;
         float amplitudeI = float(rgb1.b) * 40.0;
         float steepnessI = float(rgb2.r) * 1.0;
         float phaseI     = float(rgb2.g) * 5.0;
+        
         addWaveNormal(x, y, frequencyI, amplitudeI, steepnessI, directionI, phaseI, p, n, true); // i == wavesToAdd - 1);
     }
 

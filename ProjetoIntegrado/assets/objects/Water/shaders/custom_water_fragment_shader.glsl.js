@@ -1,7 +1,7 @@
 const fragmentShader = 
 `
 uniform sampler2D reflectionSampler;
-uniform sampler2D refractionSampler;
+// uniform sampler2D refractionSampler;
 
 uniform float alpha;
 uniform float time;
@@ -59,16 +59,13 @@ void sunLight( const vec3 surfaceNormal, const vec3 eyeDirection, float shiny, f
 #include <shadowmask_pars_fragment>
 
 void main() {
-
     #include <logdepthbuf_fragment>
 
     //***************************
     //******** Lighting *********
     //***************************
-    //////// vec4 noise = getNoise( worldPosition.xz * size );
     vec4 noise = getNoise( worldPosition.xz );
 
-    //////// vec3 surfaceNormal = normalize( vvnormal + noise.xzy * vec3( 1.5, 1.0, 1.5 ) ); // this for mix
     vec3 surfaceNormal = normalize( noise.xzy * vec3( 2.0, 1.0, 2.0 ) );
 
     vec3 diffuseLight = vec3(0.0);
@@ -84,40 +81,34 @@ void main() {
     //***************************
     float distance = length(worldToEye);
     
-    // vec2 screen = (projectedPosition.xy / projectedPosition.w + 1.0) * 0.5;
     vec2 screen = (mirrorCoord.xy / mirrorCoord.w + 1.0) * 0.5;
 
-    //////// vec2 distortion = vec2(0);
     float distortionFactor = max(distance/100.0, 10.0);
     vec2 distortion = surfaceNormal.xz / distortionFactor;
-    // vec2 distortion = surfaceNormal.xz * ( 0.001 + 1.0 / distance ) * distortionScale;
 
-    vec3 reflectionSample = vec3( texture2D( reflectionSampler, screen + distortion) );
-    // vec3 reflectionSample = vec3( texture2D( reflectionSampler, mirrorCoord.xy / mirrorCoord.w + distortion) );
-    
+    // vec3 reflectionSample = vec3( texture2D( reflectionSampler, screen + distortion) );
+    vec3 reflectionSample = vec3( texture2D( reflectionSampler, mirrorCoord.xy / mirrorCoord.w + distortion) );
+
     //**************************************** 
     //**** Fresnel-Schlicks Approximation ****
     //****************************************
     float theta = max( dot( eyeDirection, surfaceNormal ), 0.0 );
-    float rf0 = 0.02;
-
-    //////// float reflectance = rf0 + ( 1.0 - rf0 ) * pow( abs( 1.0 - theta ), 5.0 );
+    float rf0 = 0.2;
     float reflectance = rf0 + ( 1.0 - rf0 ) * pow( ( 1.0 - theta ), 5.0 );
 
 
     //***************************
     //******** Scattering *******
     //***************************
-    //////// vec3 scatter = max( 0.0, dot( surfaceNormal, eyeDirection ) ) * waterColor;
     vec3 scatter = max( 0.0, dot( surfaceNormal, eyeDirection ) ) * waterColor;
     
 
     //***************************
     //******** Refraction *******
     //***************************
-    // vec3 refractionSample = vec3( texture2D( refractionSampler, mirrorCoord.xy / mirrorCoord.w - distortion) );
-    vec3 refractionSample = vec3( texture2D( refractionSampler, screen - distortion) );
-
+    // vec3 refractionSample = vec3( texture2D( reflectionSampler, screen - distortion) );
+    vec3 refractionSample = vec3( texture2D( reflectionSampler, mirrorCoord.xy / mirrorCoord.w - distortion) );
+    
     //***************************
     //******** Absorbtion ********
     //***************************
@@ -129,19 +120,9 @@ void main() {
     //***************************
     //******** Albedo *******
     //***************************
-    // default albedo:
-    // vec3 albedo = mix( ( sunColor * diffuseLight * 0.3 + scatter ) * getShadowMask(),
-    //    ( vec3( 0.1 ) + reflectionSample * 0.9 + reflectionSample * specularLight ), reflectance);
-
-    // reflection albedo:
-    // vec3 albedo = mix( sunColor * diffuseLight * 0.3 + scatter, ( vec3( 0.1 ) + reflectionSample), reflectance );
-
     // reflection+refraction albedo:
     vec3 albedo = mix((scatter + (refractionSample * diffuseLight)) * 0.3 , ( vec3( 0.1 ) + reflectionSample * 0.9 + specularLight), reflectance );
 
-    //////// vec3 outgoingLight = albedo;
-    //////// gl_FragColor = vec4( outgoingLight, alpha );
-    //////// gl_FragColor = vec4(sunColor * (reflectionSample + vec3(0.1)) * ( diffuseLight + specularLight + 0.3 ) * 2.0, 1.0);
     gl_FragColor = vec4( albedo, alpha);
 
     #include <tonemapping_fragment>
