@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>VR Free Move (WebXR)</title>
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../html/resources/default.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">  
+
+      <style>
+        body.has-js::before {
+          content: '';
+          position: fixed;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          z-index: 10;
+          height: 100vh;
+          width: 100vw;
+          pointer-events: none;
+          transition: all .2s;
+          background: lightgray url('spinner.gif') no-repeat center center / 30%;
+        }
+        body.loaded::before {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+      </style>
+
+  </head>
+
+  <body style="background-color:black;">
+    <script>
+      // Only show loader if JS is available
+      document.body.className += ' has-js';
+      // Option 1: Hide loader when 'load' event fires
+      window.onload = function() { document.body.className += ' loaded'; }
+      // Option 2: Hide loader after 2 seconds, in case the 'load' event never fires
+      //setTimeout(function(){ document.body.className += ' loaded'; }, 1000 * 2);
+    </script>
+
+    <div id="container"></div>
+    <div id="webgl-output">
+      <script type="module" src="ceu_+_nuvens.js"></script>
+    </div>
+  </body>
+</html>
