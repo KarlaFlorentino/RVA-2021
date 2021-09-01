@@ -203,7 +203,7 @@ function createScene(){
     scene.add(c4);
     
     //Tras
-    /*var c5 = cloud();
+    var c5 = cloud();
     c5.position.x = 0; //esq dir
 	c5.position.y = 300;
 	c5.position.z = 700;
@@ -215,7 +215,7 @@ function createScene(){
 	c8.position.y = 150;
 	c8.position.z = 700;
 	c8.scale.set(300,60,60);
-    scene.add(c8);*/
+    scene.add(c8);
 
     //Direita
     var c9 = cloud();
@@ -242,13 +242,13 @@ function createScene(){
     scene.add(c11);
     c11.rotateY(degreesToRadians(145));
 
-    /*var c12 = cloud();
+    var c12 = cloud();
     c12.position.x = 700; //esq dir
 	c12.position.y = 150;
 	c12.position.z = 0;
 	c12.scale.set(300,60,60);
     scene.add(c12);
-    c12.rotateY(degreesToRadians(90));*/
+    c12.rotateY(degreesToRadians(90));
 
     //Esquerda
     var c13 = cloud();
