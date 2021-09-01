@@ -2,9 +2,7 @@
 import * as THREE from '../build/three.module.js';
 import {PlaneBufferGeometry, RepeatWrapping} from '../build/three.module.js';
 import { VRButton } from '../build/jsm/webxr/VRButton.js';
-import {onWindowResize,
-		degreesToRadians,
-		createGroundPlane} from "../libs/util/util.js";
+import {onWindowResize} from "../libs/util/util.js";
 
 import Stats from '../build/jsm/libs/stats.module.js';
 import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
@@ -28,7 +26,7 @@ let renderer = new THREE.WebGLRenderer();
 	renderer.xr.enabled = true;
 	renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.7;
+    renderer.toneMappingExposure = 0.5;
 	renderer.shadowMap.enabled = true;
 
 //-- Setting scene and camera -------------------------------------------------------------------
@@ -76,9 +74,9 @@ let sky, sun, water, ground;
 const effectController = {
     turbidity: 2,
     rayleigh: 1,
-    mieCoefficient: 0.005,
-    mieDirectionalG: 0.950,
-    elevation: 0.7,
+    mieCoefficient: 0.1,
+    mieDirectionalG: 0.995,
+    elevation: 20,
     azimuth: 180,
     exposure: renderer.toneMappingExposure
 };
@@ -179,7 +177,7 @@ function render() {
     stats.update();
 	water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
-    sunrise_to_sunset();
+    //sunrise_to_sunset();
 
     move();
 	renderer.render( scene, camera );
@@ -192,32 +190,6 @@ function render() {
 //-- Create Scene --------------------------------------------------------------------------------
 function createScene()
 {
-    // Light stuff 
-	// const light = new THREE.PointLight(0xaaaaaa);
-    // light.position.set(30,30,20);
-    // light.castShadow = true;
-    // light.distance = 0;
-    // light.shadow.mapSize.width = 1024;
-    // light.shadow.mapSize.height = 1024;	
-    // scene.add(light);
-
-    // var ambientLight = new THREE.AmbientLight(0x121212);
-    //     scene.add(ambientLight);
-
-    // Load all textures 
-    // var textureLoader = new THREE.TextureLoader();
-    // var floor 	= textureLoader.load('../assets/textures/sand.jpg');		
-
-    // // Create Ground Plane
-    // var groundPlane = createGroundPlane(80.0, 80.0, 100, 100, "rgb(200,200,150)");
-    //     groundPlane.rotateX(degreesToRadians(-90));
-    //     groundPlane.material.map = floor;		
-    //     groundPlane.material.map.wrapS = THREE.RepeatWrapping;
-    //     groundPlane.material.map.wrapT = THREE.RepeatWrapping;
-    //     groundPlane.material.map.repeat.set(8,8);		
-    // scene.add(groundPlane);
-
-
     // initDefaultOcean();
     initCustomOcean();
 	initSky();
@@ -261,29 +233,6 @@ function initSky() {
 
     sun = new THREE.Vector3();
 
-    /// GUI
-
-    /*const effectController = {
-        turbidity: 10,
-        rayleigh: 3,
-        mieCoefficient: 0.005,
-        mieDirectionalG: 0.7,
-        elevation: 2,
-        azimuth: 180,
-        exposure: renderer.toneMappingExposure
-    };*/
-
-    /*const gui = new GUI();
-
-    gui.add( effectController, 'turbidity', 0.0, 20.0, 0.1 ).onChange( guiChanged );
-    gui.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
-    gui.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
-    gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
-    gui.add( effectController, 'elevation', 0, 180, 0.1 ).onChange( guiChanged );
-    gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
-    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
-
-    */
     guiChanged();
 
 }
