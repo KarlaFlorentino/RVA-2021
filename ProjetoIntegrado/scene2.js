@@ -1,12 +1,17 @@
 //-- Imports -------------------------------------------------------------------------------------
 import * as THREE from '../build/three.module.js';
+import {PlaneBufferGeometry, RepeatWrapping} from '../build/three.module.js';
 import { VRButton } from '../build/jsm/webxr/VRButton.js';
-import { ImprovedNoise } from '../build/jsm/math/ImprovedNoise.js';
 import {onWindowResize,
-		degreesToRadians} from "../libs/util/util.js";
+		degreesToRadians,
+		createGroundPlane} from "../libs/util/util.js";
 
 import Stats from '../build/jsm/libs/stats.module.js';
+import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
 import { Sky } from './assets/objects/Sky/Sky.js';
+import { Water as DefaultWater} from './assets/objects/Water/default_water.js';
+import { Waves as CustomWater} from './assets/objects/Water/custom_water.js';
+import { Ground } from './assets/objects/Ground/Ground.js';
 
 //-----------------------------------------------------------------------------------------------
 //-- MAIN SCRIPT --------------------------------------------------------------------------------
@@ -34,8 +39,26 @@ let moveCamera; // Move when a button is pressed
 //-- 'Camera Holder' to help moving the camera
 const cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
-cameraHolder.position.set(0,6,20);
+cameraHolder.position.set(0, 50, 20);
 scene.add( cameraHolder );
+
+// create an AudioListener and add it to the camera
+const listener = new THREE.AudioListener();
+cameraHolder.add( listener );
+
+// create a global audio source
+const oceanSound = new THREE.Audio( listener );
+
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( './assets/objects/Water/sounds/sea.wav', function( buffer ) {
+	oceanSound.setBuffer( buffer );
+	oceanSound.setLoop( true );
+	oceanSound.setVolume( 0.5 );
+	oceanSound.play();
+});
+
+
 //-- Create VR button and settings ---------------------------------------------------------------
 document.body.appendChild( VRButton.createButton( renderer ) );
 
@@ -48,20 +71,24 @@ camera.add( controller1 );
 let container = document.getElementById( 'container' );
 container.appendChild( renderer.domElement );
 
-let sky, sun;
+let sky, sun, water, ground;
 
+//Amanhecer
 const effectController = {
     turbidity: 2,
     rayleigh: 1,
     mieCoefficient: 0.005,
     mieDirectionalG: 0.950,
-    elevation: 0.7,
+    elevation: 0,
     azimuth: 180,
     exposure: renderer.toneMappingExposure
 };
 
+
 const stats = Stats();
 document.body.appendChild(stats.dom);
+
+let gui = new GUI();
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 createScene();
@@ -80,7 +107,7 @@ function move()
 		quaternion = camera.quaternion;
 
 		// Get direction to translate from quaternion
-		var moveTo = new THREE.Vector3(0, 0, -0.1);
+		var moveTo = new THREE.Vector3(0, 0, -1.0);
 		moveTo.applyQuaternion(quaternion);
 
 		// Move the camera Holder to the computed direction
@@ -103,26 +130,20 @@ function onSelectEnd( )
 function sunrise_to_sunset(){
 
     //Amanhecer
-    if(effectController.elevation < 10){
-        effectController.turbidity = 2;
+    if(effectController.elevation < 10 ){
         effectController.rayleigh = 1;
-        effectController.mieCoefficient = 0.005;
-        effectController.mieDirectionalG = 0.950;
     }
 
     //Ao longo do dia
-    else if(effectController.elevation > 10 && effectController.elevation < 177){
-        effectController.turbidity = 10;
-        effectController.rayleigh = 3;
-        effectController.mieCoefficient = 0.05;
-        effectController.mieDirectionalG = 0.999;
+    else if(effectController.elevation > 10 && effectController.elevation < 178){
+        effectController.mieCoefficient = 0.1;
+        effectController.mieDirectionalG = 0.995;
     }
        
     //Por do sol
-    else if(effectController.elevation > 177){
-        effectController.turbidity = 20;
-        effectController.rayleigh = 3;
-        effectController.mieCoefficient = 0.005;
+    else if(effectController.elevation > 178){
+        effectController.rayleigh = 4;
+        effectController.mieCoefficient = 0.05;
         effectController.mieDirectionalG = 0.950;
     }
     
@@ -138,20 +159,23 @@ function sunrise_to_sunset(){
     sun.setFromSphericalCoords( 1, phi, theta );
 
     sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
+    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
 
     guiChanged();
 }
 
 //-- Main loop -----------------------------------------------------------------------------------
-function animate() {
+function animate() 
+{
 	renderer.setAnimationLoop( render );
 }
 
 function render() {
     stats.update();
+	water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
     sunrise_to_sunset();
-    
+
     move();
 	renderer.render( scene, camera );
 }
@@ -161,35 +185,42 @@ function render() {
 //------------------------------------------------------------------------------------------------
 
 //-- Create Scene --------------------------------------------------------------------------------
-function createScene(){
-    // Load all textures 
+function createScene()
+{
+    // Light stuff 
+	// const light = new THREE.PointLight(0xaaaaaa);
+    // light.position.set(30,30,20);
+    // light.castShadow = true;
+    // light.distance = 0;
+    // light.shadow.mapSize.width = 1024;
+    // light.shadow.mapSize.height = 1024;	
+    // scene.add(light);
 
-    var width = 100;
-    var length = 100;
-    
-    var textureLoader = new THREE.TextureLoader();
-    var texture = textureLoader.load('../assets/textures/sand.jpg', function(tx) {
-        var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
-        planeGeometry.translate(0.0, 0.0, 5); // To avoid conflict with the axeshelper
-          
-        var planeMaterial = new THREE.MeshBasicMaterial({
-            map: tx,
-            side: THREE.DoubleSide,
-            wireframe: false
-        });
-        
-        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.rotateX(degreesToRadians(-90));
-        scene.add( plane );
-    });
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set( width, length );
-    
+    // var ambientLight = new THREE.AmbientLight(0x121212);
+    //     scene.add(ambientLight);
+
+    // Load all textures 
+    // var textureLoader = new THREE.TextureLoader();
+    // var floor 	= textureLoader.load('../assets/textures/sand.jpg');		
+
+    // // Create Ground Plane
+    // var groundPlane = createGroundPlane(80.0, 80.0, 100, 100, "rgb(200,200,150)");
+    //     groundPlane.rotateX(degreesToRadians(-90));
+    //     groundPlane.material.map = floor;		
+    //     groundPlane.material.map.wrapS = THREE.RepeatWrapping;
+    //     groundPlane.material.map.wrapT = THREE.RepeatWrapping;
+    //     groundPlane.material.map.repeat.set(8,8);		
+    // scene.add(groundPlane);
+
+
+    // initDefaultOcean();
+    initCustomOcean();
 	initSky();
+	initGround();
 }
 
-function guiChanged(){
+
+function guiChanged() {
 
     const uniforms = sky.material.uniforms;
     uniforms[ 'turbidity' ].value = effectController.turbidity;
@@ -203,13 +234,20 @@ function guiChanged(){
     sun.setFromSphericalCoords( 1, phi, theta );
 
     uniforms[ 'sunPosition' ].value.copy( sun );
+    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
 
     renderer.toneMappingExposure = effectController.exposure;
     renderer.render( scene, camera );
 
 }
 
-function initSky(){
+function initGround()
+{
+	ground = new Ground(5000, 650, 816, 816, 50);
+	scene.add(ground);
+}
+
+function initSky() {
 
     // Add Sky
     sky = new Sky();
@@ -239,9 +277,79 @@ function initSky(){
     gui.add( effectController, 'elevation', 0, 180, 0.1 ).onChange( guiChanged );
     gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
     gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
-    
+
     */
     guiChanged();
 
 }
 
+function initDefaultOcean()
+{
+    const waterGeometry = new THREE.PlaneGeometry( 50000, 50000 );
+    water = new Water(
+        waterGeometry,
+        {
+            textureWidth: 512,
+            textureHeight: 512,
+            waterNormals: new THREE.TextureLoader().load( '../assets/textures/waternormals.jpg', function ( texture ) {
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            } ),
+            sunDirection: new THREE.Vector3(),
+            sunColor: 0xffffff,
+            waterColor: 0x00eeff,
+            distortionScale: 3.7,
+            fog: scene.fog !== undefined
+        }
+    );
+    water.rotation.x = - Math.PI / 2;
+    scene.add( water );
+
+    // const waterUniforms = water.material.uniforms;
+
+    // const folderWater = gui.addFolder( 'Water' );
+    // folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
+    // folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+    // folderWater.open();
+}
+
+function initCustomOcean()
+{
+     // Water
+    let waterGeometry = new PlaneBufferGeometry(10000, 10000, 512, 512);
+
+    water = new CustomWater(
+        waterGeometry,
+        {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('./assets/textures/waternormals.jpg', function(texture) { 
+            texture.wrapS = texture.wrapT = RepeatWrapping; 
+        }),
+
+        alpha:         1.0,
+        sunDirection:  new THREE.Vector3(),
+        sunColor:      0xffffff,
+        waterColor:    0x00eeff,
+        direction:     1.35,
+        frequency:     0.02,
+        amplitude:     10.0,
+        steepness:     0.2,
+        speed:         1.25,
+        manyWaves:     0,
+        side: THREE.DoubleSide
+        }
+    );
+    water.rotation.x = -Math.PI / 2;
+    scene.add(water);
+
+    const waterUniforms = water.material.uniforms;
+
+    const folder = gui.addFolder('Water');
+    folder.add(waterUniforms.direction,     'value',    0,      2 * Math.PI,    0.01).name('wave angle');
+    folder.add(waterUniforms.frequency,     'value',    0.01,   0.1,           0.001).name('frequency');
+    folder.add(waterUniforms.amplitude,     'value',    0.0,    40.0,           0.5).name('amplitude');
+    folder.add(waterUniforms.steepness,     'value',    0,      1.0,            0.01).name('steepness');
+    folder.add(waterUniforms.speed,         'value',    0.0,    5.0,            0.01).name('speed');
+    folder.add(waterUniforms.wavesToAdd,    'value',    0,      16,             1).name('add waves');
+    folder.open();
+}
