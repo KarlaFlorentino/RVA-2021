@@ -11,7 +11,7 @@
 //=========================================================================================================
 
 // MODULES
-import * as THREE   from "../build/three.module.js";
+import * as THREE   from "../../../../build/three.module.js";
 //import { VRButton } from "../../../../build/jsm/webxr/VRButton.js";
 //import Stats        from "../../../../build/jsm/libs/stats.module.js";
 
@@ -90,7 +90,7 @@ function init()
 
 	// BASIC WATER
 	var waterGeo = new THREE.PlaneGeometry(1000, 1000, 1, 1);
-	var waterTex = loader.load("images/water512.jpg");
+	var waterTex = loader.load("./assets/objects/Ground/images/water512.jpg");
 	waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
 	waterTex.repeat.set(5, 5);
 	var waterMat = new THREE.MeshBasicMaterial({ map: waterTex, transparent: true, opacity: 0.40 });
@@ -103,17 +103,17 @@ function init()
 	cameraHolder.position.set(0, height, base / 2); // em função da altura da ilha
 }
 */
-class Ground extends Mesh
+class Ground extends THREE.Mesh
 {
 	constructor(b, h, u, v, s)
 	{
 		// TEXTURES
 		var tex = [];
-		var bumpTexture = loader.load("images/heightmap.png");
+		var bumpTexture = loader.load("./assets/objects/Ground/images/heightmap.png");
 		bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
 		for (var i = 0; i < 5; i++)
 		{
-			tex.push(loader.load("images/tex" + i.toString() + ".jpg"));
+			tex.push(loader.load("./assets/objects/Ground/images/tex" + i.toString() + ".jpg"));
 			tex[i].wrapS = tex[i].wrapT = THREE.RepeatWrapping;
 		}
 
@@ -140,9 +140,12 @@ class Ground extends Mesh
 
 		// SHADER ISLAND
 		var planeGeo = new THREE.PlaneGeometry(b, b, u, v);
-		var plane = new THREE.Mesh(planeGeo, customMaterial);
-		plane.rotation.x = -Math.PI / 2;
-		plane.position.y = -h / 2; // em função da altura da ilha
+		super(planeGeo, customMaterial);
+		this.rotation.x = -Math.PI / 2;
+		this.position.y = 100 - h / 2; // em função da altura da ilha
+//		var plane = new THREE.Mesh(planeGeo, customMaterial);
+//		plane.rotation.x = -Math.PI / 2;
+//		plane.position.y = -h / 2; // em função da altura da ilha
 	}
 //	return plane;
 };
