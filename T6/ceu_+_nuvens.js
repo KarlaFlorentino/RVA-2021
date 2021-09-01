@@ -52,10 +52,10 @@ let sky, sun;
 let mesh;
 
 const effectController = {
-    turbidity: 10,
+    turbidity: 2,
     rayleigh: 1,
-    mieCoefficient: 0.01,
-    mieDirectionalG: 0.999,
+    mieCoefficient: 0.1,
+    mieDirectionalG: 0.995,
     elevation: 60,
     azimuth: 180,
     exposure: renderer.toneMappingExposure
@@ -203,7 +203,7 @@ function createScene(){
     scene.add(c4);
     
     //Tras
-    var c5 = cloud();
+    /*var c5 = cloud();
     c5.position.x = 0; //esq dir
 	c5.position.y = 300;
 	c5.position.z = 700;
@@ -215,7 +215,7 @@ function createScene(){
 	c8.position.y = 150;
 	c8.position.z = 700;
 	c8.scale.set(300,60,60);
-    scene.add(c8);
+    scene.add(c8);*/
 
     //Direita
     var c9 = cloud();
@@ -234,7 +234,7 @@ function createScene(){
     scene.add(c10);
     c10.rotateY(degreesToRadians(45));
 
-    var c11 = cloud();
+    var c11 = cloud(); //essa no
     c11.position.x = 600; //esq dir
 	c11.position.y = 200;
 	c11.position.z = -600;
@@ -242,13 +242,13 @@ function createScene(){
     scene.add(c11);
     c11.rotateY(degreesToRadians(145));
 
-    var c12 = cloud();
+    /*var c12 = cloud();
     c12.position.x = 700; //esq dir
 	c12.position.y = 150;
 	c12.position.z = 0;
 	c12.scale.set(300,60,60);
     scene.add(c12);
-    c12.rotateY(degreesToRadians(90));
+    c12.rotateY(degreesToRadians(90));*/
 
     //Esquerda
     var c13 = cloud();
@@ -256,7 +256,7 @@ function createScene(){
 	c13.position.y = 300;
 	c13.position.z = 0;
 	c13.scale.set(600,100,100);
-    scene.add(c13);
+    //scene.add(c13);
     c13.rotateY(degreesToRadians(90));
 
     var c14 = cloud();
@@ -264,7 +264,7 @@ function createScene(){
 	c14.position.y = 200;
 	c14.position.z = 600;
 	c14.scale.set(500,100,100);
-    scene.add(c14);
+    //scene.add(c14);
     c14.rotateY(degreesToRadians(145));
 
     var c15 = cloud();
@@ -280,7 +280,7 @@ function createScene(){
 	c16.position.y = 150;
 	c16.position.z = 0;
 	c16.scale.set(300,60,60);
-    scene.add(c16);
+    //scene.add(c16);
     c16.rotateY(degreesToRadians(90));
 
 	initSky();
