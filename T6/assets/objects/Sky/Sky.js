@@ -1,3 +1,9 @@
+/**
+ * TRABALHO ORIGINAL: https://github.com/mrdoob/three.js/blob/master/examples/webgl_shaders_sky.html
+*/
+
+
+
 import {
 	BackSide,
 	BoxGeometry,
@@ -103,6 +109,7 @@ Sky.SkyShader = {
 			vSunDirection = normalize( sunPosition );
 			vSunE = sunIntensity( dot( vSunDirection, up ) );
 			vSunfade = 1.0 - clamp( 1.0 - exp( ( sunPosition.y / 450000.0 ) ), 0.0, 1.0 );
+
 			float rayleighCoefficient = rayleigh - ( 1.0 * ( 1.0 - vSunfade ) );
 			// extinction (absorbtion + out scattering)
 			// rayleigh coefficients
@@ -161,9 +168,9 @@ Sky.SkyShader = {
 			vec3 Lin = pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * ( 1.0 - Fex ), vec3( 1.5 ) );
 			Lin *= mix( vec3( 1.0 ), pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * Fex, vec3( 1.0 / 2.0 ) ), clamp( pow( 1.0 - dot( up, vSunDirection ), 5.0 ), 0.0, 1.0 ) );
 			// nightsky
-			float theta = acos( direction.y ); // elevation --> y-axis, [-pi/2, pi/2]
-			float phi = atan( direction.z, direction.x ); // azimuth --> x-axis [-pi/2, pi/2]
-			vec2 uv = vec2( phi, theta ) / vec2( 2.0 * pi, pi ) + vec2( 0.5, 0.0 );
+			//float theta = acos( direction.y ); // elevation --> y-axis, [-pi/2, pi/2]
+			//float phi = atan( direction.z, direction.x ); // azimuth --> x-axis [-pi/2, pi/2]
+			//vec2 uv = vec2( phi, theta ) / vec2( 2.0 * pi, pi ) + vec2( 0.5, 0.0 );
 			vec3 L0 = vec3( 0.1 ) * Fex;
 			// composition + solar disc
 			float sundisk = smoothstep( sunAngularDiameterCos, sunAngularDiameterCos + 0.00002, cosTheta );
