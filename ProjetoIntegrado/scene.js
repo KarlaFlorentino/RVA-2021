@@ -106,7 +106,11 @@ function move()
 		quaternion = camera.quaternion;
 
 		// Get direction to translate from quaternion
+<<<<<<< Updated upstream
 		var moveTo = new THREE.Vector3(0, 0, -1.0);
+=======
+		var moveTo = new THREE.Vector3(0, 0, -1);
+>>>>>>> Stashed changes
 		moveTo.applyQuaternion(quaternion);
 
 		// Move the camera Holder to the computed direction

@@ -126,6 +126,7 @@ void main()
 {
     mirrorCoord = modelMatrix * vec4( position, 1.0 );
     worldPosition = mirrorCoord.xyzw;
+    
     mirrorCoord = textureMatrix * mirrorCoord;
     vec4 mvPosition =  modelViewMatrix * vec4( position, 1.0 );
 
