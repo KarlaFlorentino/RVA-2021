@@ -11,7 +11,7 @@ import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
 import { Sky } from './assets/objects/Sky/Sky.js';
 import { Water as DefaultWater} from './assets/objects/Water/default_water.js';
 import { Waves as CustomWater} from './assets/objects/Water/custom_water.js';
-
+import { Ground } from './assets/objects/Ground/Ground.js';
 
 //-----------------------------------------------------------------------------------------------
 //-- MAIN SCRIPT --------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ camera.add( controller1 );
 let container = document.getElementById( 'container' );
 container.appendChild( renderer.domElement );
 
-let sky, sun, water;
+let sky, sun, water, ground;
 
 const effectController = {
     turbidity: 2,
@@ -106,7 +106,7 @@ function move()
 		quaternion = camera.quaternion;
 
 		// Get direction to translate from quaternion
-		var moveTo = new THREE.Vector3(0, 0, -0.1);
+		var moveTo = new THREE.Vector3(0, 0, -1.0);
 		moveTo.applyQuaternion(quaternion);
 
 		// Move the camera Holder to the computed direction
@@ -221,6 +221,7 @@ function createScene()
     // initDefaultOcean();
     initCustomOcean();
 	initSky();
+	initGround();
 }
 
 
@@ -245,6 +246,11 @@ function guiChanged() {
 
 }
 
+function initGround()
+{
+	ground = new Ground(5000, 650, 816, 816, 50);
+	scene.add(ground);
+}
 
 function initSky() {
 
@@ -276,7 +282,7 @@ function initSky() {
     gui.add( effectController, 'elevation', 0, 180, 0.1 ).onChange( guiChanged );
     gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
     gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
-    
+
     */
     guiChanged();
 
