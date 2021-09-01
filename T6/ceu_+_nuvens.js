@@ -163,8 +163,7 @@ function render() {
 
 //-- Create Scene --------------------------------------------------------------------------------
 function createScene(){
-    // Load all textures 
-
+    // Plano
     var width = 100;
     var length = 100;
     
@@ -187,103 +186,104 @@ function createScene(){
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set( width, length );
 
+    initSky();
+
    //Frente
    var c1 = cloud();
-    c1.position.x = 0; //esq dir
+    c1.position.x = 0; 
 	c1.position.y = 300;
 	c1.position.z = -700;
 	c1.scale.set(600,100,100);
     scene.add(c1);
 
-    var c4 = cloud();
-    c4.position.x = 0; //esq dir
-	c4.position.y = 150;
-	c4.position.z = -700;
-	c4.scale.set(300,60,60);
-    scene.add(c4);
+    var c2 = cloud();
+    c2.position.x = 0; 
+	c2.position.y = 150;
+	c2.position.z = -700;
+	c2.scale.set(300,60,60);
+    scene.add(c2);
     
-    //Tras
-    var c5 = cloud();
-    c5.position.x = 0; //esq dir
-	c5.position.y = 300;
-	c5.position.z = 700;
-	c5.scale.set(600,100,100);
-    scene.add(c5);
+    /*//Tras
+    var c3 = cloud();
+    c3.position.x = 0; 
+	c3.position.y = 300;
+	c3.position.z = 700;
+	c3.scale.set(600,100,100);
+    scene.add(c3);
 
-    var c8 = cloud();
-    c8.position.x = 0; //esq dir
-	c8.position.y = 150;
-	c8.position.z = 700;
-	c8.scale.set(300,60,60);
-    scene.add(c8);
+    var c4 = cloud();
+    c4.position.x = 0; 
+	c4.position.y = 150;
+	c4.position.z = 700;
+	c4.scale.set(300,60,60);
+    scene.add(c4);*/
 
     //Direita
+    var c5 = cloud(); //essa no
+    c5.position.x = 600; 
+	c5.position.y = 200;
+	c5.position.z = -600;
+	c5.scale.set(500,100,100);
+    scene.add(c5);
+    c5.rotateY(degreesToRadians(145));
+    
+    /*var c6 = cloud();
+    c6.position.x = 700; 
+	c6.position.y = 300;
+	c6.position.z = 0;
+	c6.scale.set(600,100,100);
+    scene.add(c6);
+    c6.rotateY(degreesToRadians(90));
+
+    var c7 = cloud();
+    c7.position.x = 600; 
+	c7.position.y = 200;
+	c7.position.z = 600;
+	c7.scale.set(500,100,100);
+    scene.add(c7);
+    c7.rotateY(degreesToRadians(45));
+
+    var c8 = cloud();
+    c8.position.x = 700; 
+	c8.position.y = 150;
+	c8.position.z = 0;
+	c8.scale.set(300,60,60);
+    scene.add(c8);
+    c8.rotateY(degreesToRadians(90));*/
+
+    //Esquerda
     var c9 = cloud();
-    c9.position.x = 700; //esq dir
-	c9.position.y = 300;
-	c9.position.z = 0;
-	c9.scale.set(600,100,100);
+    c9.position.x = -600; 
+	c9.position.y = 200;
+	c9.position.z = -600;
+	c9.scale.set(500,100,100);
     scene.add(c9);
-    c9.rotateY(degreesToRadians(90));
+    c9.rotateY(degreesToRadians(45));
 
-    var c10 = cloud();
-    c10.position.x = 600; //esq dir
-	c10.position.y = 200;
-	c10.position.z = 600;
-	c10.scale.set(500,100,100);
+    /*var c10 = cloud();
+    c10.position.x = -700; 
+	c10.position.y = 300;
+	c10.position.z = 0;
+	c10.scale.set(600,100,100);
     scene.add(c10);
-    c10.rotateY(degreesToRadians(45));
+    c10.rotateY(degreesToRadians(90));
 
-    var c11 = cloud(); //essa no
-    c11.position.x = 600; //esq dir
+    var c11 = cloud();
+    c11.position.x = -600; 
 	c11.position.y = 200;
-	c11.position.z = -600;
+	c11.position.z = 600;
 	c11.scale.set(500,100,100);
     scene.add(c11);
     c11.rotateY(degreesToRadians(145));
 
     var c12 = cloud();
-    c12.position.x = 700; //esq dir
+    c12.position.x = -700; 
 	c12.position.y = 150;
 	c12.position.z = 0;
 	c12.scale.set(300,60,60);
-    scene.add(c12);
-    c12.rotateY(degreesToRadians(90));
+    //scene.add(c12);
+    c12.rotateY(degreesToRadians(90));*/
 
-    //Esquerda
-    var c13 = cloud();
-    c13.position.x = -700; //esq dir
-	c13.position.y = 300;
-	c13.position.z = 0;
-	c13.scale.set(600,100,100);
-    //scene.add(c13);
-    c13.rotateY(degreesToRadians(90));
-
-    var c14 = cloud();
-    c14.position.x = -600; //esq dir
-	c14.position.y = 200;
-	c14.position.z = 600;
-	c14.scale.set(500,100,100);
-    //scene.add(c14);
-    c14.rotateY(degreesToRadians(145));
-
-    var c15 = cloud();
-    c15.position.x = -600; //esq dir
-	c15.position.y = 200;
-	c15.position.z = -600;
-	c15.scale.set(500,100,100);
-    scene.add(c15);
-    c15.rotateY(degreesToRadians(45));
-
-    var c16 = cloud();
-    c16.position.x = -700; //esq dir
-	c16.position.y = 150;
-	c16.position.z = 0;
-	c16.scale.set(300,60,60);
-    //scene.add(c16);
-    c16.rotateY(degreesToRadians(90));
-
-	initSky();
 }
 
 function cloud(){
