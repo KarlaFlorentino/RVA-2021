@@ -86,9 +86,12 @@ void main() {
     float distortionFactor = max(distance/100.0, 10.0);
     vec2 distortion = surfaceNormal.xz / distortionFactor;
 
-    // vec3 reflectionSample = vec3( texture2D( reflectionSampler, screen + distortion) );
     vec3 reflectionSample = vec3( texture2D( reflectionSampler, mirrorCoord.xy / mirrorCoord.w + distortion) );
 
+
+    // vec2 screen = (projectedPosition.xy/projectedPosition.z + 1.0)*0.5;
+    // vec3 reflectionSample = vec3(texture2D(reflectionSampler, screen+distortion));
+    
     //**************************************** 
     //**** Fresnel-Schlicks Approximation ****
     //****************************************
@@ -106,9 +109,10 @@ void main() {
     //***************************
     //******** Refraction *******
     //***************************
-    // vec3 refractionSample = vec3( texture2D( reflectionSampler, screen - distortion) );
     vec3 refractionSample = vec3( texture2D( reflectionSampler, mirrorCoord.xy / mirrorCoord.w - distortion) );
-    
+
+    // vec3 refractionSample = vec3( texture2D( reflectionSampler, screen - distortion) );
+
     //***************************
     //******** Absorbtion ********
     //***************************
@@ -120,10 +124,12 @@ void main() {
     //***************************
     //******** Albedo *******
     //***************************
-    // reflection+refraction albedo:
     vec3 albedo = mix((scatter + (refractionSample * diffuseLight)) * 0.3 , ( vec3( 0.1 ) + reflectionSample * 0.9 + specularLight), reflectance );
-
     gl_FragColor = vec4( albedo, alpha);
+
+    // vec3 albedo = mix((scatter + (refractionSample * diffuseLight * refractionColor)) * 0.3, 
+    //                     ( vec3( 0.1 ) + reflectionSample * 0.9 + specularLight), reflectance );
+    // gl_FragColor = vec4( albedo, alpha);
 
     #include <tonemapping_fragment>
     #include <fog_fragment>
