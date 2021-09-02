@@ -214,7 +214,10 @@ function guiChanged() {
 
 function initGround()
 {
-	ground = new Ground(5000, 650, 512, 512, 50);
+	// ground = new Ground(5000, 650, 1024, 1024, 50);
+    // ground = new Ground(5000, 650, 512, 512, 50);
+    ground = new Ground(5000, 650, 384, 384, 50);
+    // ground = new Ground(5000, 650, 256, 256, 50);
 	scene.add(ground);
 }
 
@@ -251,19 +254,12 @@ function initDefaultOcean()
     );
     water.rotation.x = - Math.PI / 2;
     scene.add( water );
-
-    // const waterUniforms = water.material.uniforms;
-
-    // const folderWater = gui.addFolder( 'Water' );
-    // folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
-    // folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
-    // folderWater.open();
 }
 
 function initCustomOcean()
 {
-     // Water
-    let waterGeometry = new PlaneBufferGeometry(10000, 10000, 512, 512);
+    // let waterGeometry = new PlaneBufferGeometry(10000, 10000, 512, 512);
+    let waterGeometry = new PlaneBufferGeometry(10000, 10000, 256, 256);
 
     water = new CustomWater(
         waterGeometry,
@@ -295,7 +291,7 @@ function initCustomOcean()
     const folder = gui.addFolder('Water');
     folder.add(waterUniforms.direction,     'value',    0,      2 * Math.PI,    0.01).name('wave angle');
     folder.add(waterUniforms.frequency,     'value',    0.01,   0.1,           0.001).name('frequency');
-    folder.add(waterUniforms.amplitude,     'value',    0.0,    40.0,           0.5).name('amplitude');
+    folder.add(waterUniforms.amplitude,     'value',    0.0,    20.0,           0.5).name('amplitude');
     folder.add(waterUniforms.steepness,     'value',    0,      1.0,            0.01).name('steepness');
     folder.add(waterUniforms.speed,         'value',    0.0,    5.0,            0.01).name('speed');
     folder.add(waterUniforms.wavesToAdd,    'value',    0,      16,             1).name('add waves');

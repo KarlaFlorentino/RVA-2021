@@ -136,6 +136,7 @@ class Ground extends THREE.Mesh
 			uniforms: customUniforms,
 			vertexShader: vshader,
 			fragmentShader: fshader,
+			// wireframe: true
 		});
 
 		// SHADER ISLAND
