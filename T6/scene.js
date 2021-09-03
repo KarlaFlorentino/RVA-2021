@@ -4,6 +4,7 @@ import { VRButton } from '../build/jsm/webxr/VRButton.js';
 import {onWindowResize,
 		degreesToRadians} from "../libs/util/util.js";
 
+import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
 import Stats from '../build/jsm/libs/stats.module.js';
 import { Sky } from './assets/objects/Sky/Sky.js';
 
@@ -63,6 +64,10 @@ const effectController = {
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
+let gui = new GUI();
+var speed = 0.03;
+var animationOn = true;
+
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 createScene();
 animate();
@@ -121,7 +126,7 @@ function sunrise_to_sunset(){
     }
     
     if(effectController.elevation < 180){
-        effectController.elevation += 0.03;
+        effectController.elevation += speed;
     }else{
         effectController.elevation = 0.7;
     }    
@@ -144,8 +149,10 @@ function animate() {
 function render() {
     stats.update();
 
-    sunrise_to_sunset();
-    
+    if(animationOn){
+         sunrise_to_sunset();
+    }
+   
     move();
 	renderer.render( scene, camera );
 }
@@ -207,11 +214,36 @@ function initSky(){
 
     // Add Sky
     sky = new Sky();
-    sky.scale.setScalar( 10000 );
+    sky.scale.setScalar( 10000 ); 
     scene.add( sky );
 
     sun = new THREE.Vector3();
 
+    var controls = new function ()
+    {
+      this.onChangeAnimation = function(){
+        animationOn = !animationOn;
+      };
+      this.speed = 0.03;
+  
+      this.changeSpeed = function(){
+        speed = this.speed;
+      };
+    };
+    
+    const folderSky = gui.addFolder('Sky');
+    folderSky.add( effectController, 'turbidity', 0.0, 20.0, 0.1 ).onChange( guiChanged );
+    folderSky.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
+    folderSky.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
+    folderSky.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
+    folderSky.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
+    folderSky.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
+    folderSky.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
+    folderSky.add(controls, 'onChangeAnimation',true).name("Animation On/Off");
+    folderSky.add(controls, 'speed', 0.03, 0.5)
+        .onChange(function(e) { controls.changeSpeed() })
+        .name("Change Speed");
+        
     guiChanged();
 
 }
