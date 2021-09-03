@@ -21,7 +21,7 @@ uniform sampler2D coefficientSampler;
 uniform float time;
 varying vec4 mirrorCoord;
 varying vec4 worldPosition;
-varying vec4 projectedPosition;
+
 varying vec3 vvnormal;
 
 #include <common>
@@ -126,18 +126,19 @@ void main()
 {
     mirrorCoord = modelMatrix * vec4( position, 1.0 );
     worldPosition = mirrorCoord.xyzw;
-    
     mirrorCoord = textureMatrix * mirrorCoord;
     vec4 mvPosition =  modelViewMatrix * vec4( position, 1.0 );
 
-    // Gerstner
+    // this is how to use gerstner
     vec3 newPo = gerstnerPositions(position.x, position.y);
     vec3 gn = gerstnerNormals(position.x, position.y, newPo);
     vvnormal = normalMatrix * gn;
     mvPosition = modelViewMatrix * vec4(newPo.x, newPo.y, newPo.z, 1.0);
 
-    gl_Position  = projectedPosition = projectionMatrix * mvPosition;
+    gl_Position = projectionMatrix * mvPosition;
 
+    //#include <beginnormal_vertex>
+    //#include <defaultnormal_vertex>
     #include <logdepthbuf_vertex>
     #include <fog_vertex>
     #include <shadowmap_vertex>
