@@ -2,7 +2,7 @@
 import * as THREE from '../build/three.module.js';
 import {PlaneBufferGeometry, RepeatWrapping} from '../build/three.module.js';
 import { VRButton } from '../build/jsm/webxr/VRButton.js';
-import {onWindowResize} from "../libs/util/util.js";
+import {degreesToRadians, onWindowResize, radiansToDegrees} from "../libs/util/util.js";
 
 import Stats from '../build/jsm/libs/stats.module.js';
 import {GUI} from       '../build/jsm/libs/dat.gui.module.js';
@@ -31,13 +31,14 @@ let renderer = new THREE.WebGLRenderer();
 
 //-- Setting scene and camera -------------------------------------------------------------------
 let scene = new THREE.Scene();
-let camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
+let camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 10000 );
 let moveCamera; // Move when a button is pressed 
 
 //-- 'Camera Holder' to help moving the camera
 const cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
-cameraHolder.position.set(0, 50, 20);
+cameraHolder.position.set(0, 500, 20);
+cameraHolder.rotation.set(degreesToRadians(-30), degreesToRadians(0), degreesToRadians(0));
 scene.add( cameraHolder );
 
 // create an AudioListener and add it to the camera
@@ -191,7 +192,6 @@ function createScene()
 	initSky();
 	initGround();
 }
-
 
 function guiChanged() {
 
