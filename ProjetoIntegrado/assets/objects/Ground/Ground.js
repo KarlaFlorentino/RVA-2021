@@ -19,7 +19,8 @@ import fshader from "./shaders/fragment.glsl.js";
 
 class Ground extends THREE.Mesh
 {
-	constructor(b, h, u, v, s)
+	// size, height, hor segments, ver segments, vec3, shadow mult, tex mult, init y pos
+	constructor(b, h, u, v, t, d, s, p)
 	{
 		// TEXTURES
 		var loader = new THREE.TextureLoader();
@@ -33,19 +34,19 @@ class Ground extends THREE.Mesh
 		}
 
 		// GLSL UNIFORMS
-		var lightDir = new THREE.Vector3(1, 15, -1);
 		var customUniforms =
 		{
-			bumpTexture:    { type: "t", value: bumpTexture          },
-			normalTexture:  { type: "t", value: normalTexture        },
-			bumpScale:      { type: "f", value: h                    },
-			mapScale:       { type: "f", value: s                    },
-			tex1:           { type: "t", value: tex[0]               },
-			tex2:           { type: "t", value: tex[1]               },
-			tex3:           { type: "t", value: tex[2]               },
-			tex4:           { type: "t", value: tex[3]               },
-			tex5:           { type: "t", value: tex[4]               },
-			lightDirection: {            value: lightDir.normalize() }
+			bumpTexture:    { type: "t", value: bumpTexture   },
+			normalTexture:  { type: "t", value: normalTexture },
+			bumpScale:      { type: "f", value: h             },
+			mapScale:       { type: "f", value: s             },
+			brightness:     { type: "f", value: d             },
+			tex1:           { type: "t", value: tex[0]        },
+			tex2:           { type: "t", value: tex[1]        },
+			tex3:           { type: "t", value: tex[2]        },
+			tex4:           { type: "t", value: tex[3]        },
+			tex5:           { type: "t", value: tex[4]        },
+			lightDirection: {            value: t.normalize() }
 		};
 
 		// SHADER MATERIAL
@@ -60,7 +61,7 @@ class Ground extends THREE.Mesh
 		var planeGeo = new THREE.PlaneGeometry(b, b, u, v);
 		super(planeGeo, customMaterial);
 		this.rotation.x = -Math.PI / 2;
-		this.position.y = 100 - h / 2; // em função da altura da ilha
+		this.position.y = p;
 	}
 };
 

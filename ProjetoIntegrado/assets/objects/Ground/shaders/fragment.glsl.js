@@ -7,6 +7,7 @@ uniform sampler2D tex3;
 uniform sampler2D tex4;
 uniform sampler2D tex5;
 uniform float mapScale;
+uniform float brightness;
 uniform vec3 lightDirection;
 
 // interpolated from vertex shader
@@ -25,7 +26,8 @@ void main()
 	gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0) + t1 + t2 + t3 + t4 + t5;
 
 	// apply diffuse shadows
-	gl_FragColor.rgb *= dot(normalize(vNormal), lightDirection);
+	vec3 n = vNormal * 2.0 - 1.0; // correction due to how normal value is passed
+	gl_FragColor.rgb *= max(dot(-lightDirection, n), 0.0) * abs(brightness);
 }
 `
 export default shader

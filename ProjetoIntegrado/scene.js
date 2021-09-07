@@ -77,17 +77,31 @@ const effectController = {
     rayleigh: 1,
     mieCoefficient: 0.1,
     mieDirectionalG: 0.995,
-    elevation: 20,
-    azimuth: 180,
+    elevation: 30,//20,
+    azimuth: 50,//180,
     exposure: renderer.toneMappingExposure
+};
+
+const terrainController =
+{
+	size:       5000.0,
+	height:      650.0,
+	segments:    500.0,
+	brightness:    1.0,
+	sunDirX:       1.0,
+	sunDirY:       5.0,
+	sunDirZ:      -1.0,
+	pos:           0.0,
+//	autoSun:     false
 };
 
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
 let gui = new GUI();
-var speed = 0.03;
+var speed = 0.15;
 var animationOn = false;
+const pos = -225; // altura inicial da ilha
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 createScene();
@@ -189,8 +203,8 @@ function createScene()
 {
     // initDefaultOcean();
     initCustomOcean();
-	initSky();
 	initGround();
+	initSky();
 }
 
 function guiChanged() {
@@ -210,14 +224,68 @@ function guiChanged() {
     water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
 
     renderer.toneMappingExposure = effectController.exposure;
-    renderer.render( scene, camera );
+    //renderer.render( scene, camera );
 
+	terrainChanged();
+}
+
+function terrainChanged()
+{
+	ground.material.uniforms["bumpScale"].value  = terrainController.height;
+	ground.material.uniforms["brightness"].value = terrainController.brightness * effectController.exposure;
+	ground.position.y = pos + terrainController.pos;
+/*	if (!terrainController.autoSun)
+	{
+		const x = terrainController.sunDirX;
+		const y = terrainController.sunDirY;
+		const z = terrainController.sunDirZ;
+		ground.material.uniforms["lightDirection"].value = new THREE.Vector3(x, y, z).normalize();
+	}
+	else*/
+	const light = new THREE.Vector3().copy(sun).normalize();
+	light.z *= -1;
+	ground.material.uniforms["lightDirection"].value = light;
+}
+
+function rebuildTerrain()
+{
+	ground.geometry.dispose();
+	const a = terrainController.size;
+	const b = terrainController.segments;
+	ground.geometry = new THREE.PlaneGeometry(a, a, b, b);
 }
 
 function initGround()
 {
-	ground = new Ground(5000, 650, 816, 816, 50);
+	const b = terrainController.size;
+	const h = terrainController.height;
+	const s = terrainController.segments;
+	const d = terrainController.brightness;
+	const x = terrainController.sunDirX;
+	const y = terrainController.sunDirY;
+	const z = terrainController.sunDirZ;
+	const v = new THREE.Vector3(x, y, z);
+	ground = new Ground(b, h, s, s, v, d, 50, pos);
 	scene.add(ground);
+/*	var controls = new function()
+	{
+		this.autoSun = false;
+		this.onAutoSun = function()
+		{
+			terrainController.autoSun = this.autoSun;
+			terrainChanged();
+		};
+	};*/
+	const folder = gui.addFolder("Terrain");
+	folder.add(terrainController, "height",        0.0, 1000.0,  10.00).onChange(terrainChanged);
+	folder.add(terrainController, "size",       1000.0, 9000.0, 100.00).onChange(rebuildTerrain);
+	folder.add(terrainController, "segments",      1.0,  816.0,   1.00).onChange(rebuildTerrain);
+	folder.add(terrainController, "brightness",    0.0,    5.0,   0.01).onChange(terrainChanged);
+	folder.add(terrainController, "pos",           0.0,  500.0,  10.00).onChange(terrainChanged).name("position z");
+/*	folder.add(controls, "autoSun", false).name("automatic sun direction").onChange(function(e) { controls.onAutoSun() });
+	folder.add(terrainController, "sunDirX", -10.0, 10.0, 0.1).onChange(terrainChanged).name("sun direction x");
+	folder.add(terrainController, "sunDirY", -10.0, 10.0, 0.1).onChange(terrainChanged).name("sun direction y");
+	folder.add(terrainController, "sunDirZ", -10.0, 10.0, 0.1).onChange(terrainChanged).name("sun direction z");*/
 }
 
 function initSky() {
